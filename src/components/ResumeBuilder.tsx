@@ -1,28 +1,10 @@
 import React, { useState } from 'react';
-import { Plus, Briefcase, GraduationCap, Award } from 'lucide-react';
-
-interface PersonalInfo {
-  fullName: string;
-  email: string;
-  phone: string;
-  location: string;
-}
-
-interface Experience {
-  id: string;
-  title: string;
-  company: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-}
-
-interface Education {
-  id: string;
-  degree: string;
-  school: string;
-  year: string;
-}
+import { Plus, FileText } from 'lucide-react';
+import { Button } from './ui/button';
+import ResumeTemplates from './ResumeTemplates';
+import ResumePreview from './ResumePreview';
+import LatexEditor from './LatexEditor';
+import { PersonalInfo, Experience, Education } from './ResumeTypes';
 
 const ResumeBuilder = () => {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
@@ -36,6 +18,8 @@ const ResumeBuilder = () => {
   const [education, setEducation] = useState<Education[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [newSkill, setNewSkill] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState('modern');
+  const [showPreview, setShowPreview] = useState(false);
 
   const addExperience = () => {
     const newExp: Experience = {
@@ -78,11 +62,24 @@ const ResumeBuilder = () => {
     ));
   };
 
+  const handleCompileResume = () => {
+    setShowPreview(true);
+  };
+
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br from-blue-900 to-purple-900">
       <div className="max-w-4xl mx-auto space-y-8">
         <h1 className="text-4xl font-bold text-center text-white mb-12">Resume Builder</h1>
         
+        {/* Template Selection */}
+        <div className="glass-panel p-6 resume-section">
+          <h2 className="text-2xl font-semibold text-white mb-4">Choose Template</h2>
+          <ResumeTemplates
+            selectedTemplate={selectedTemplate}
+            onSelectTemplate={setSelectedTemplate}
+          />
+        </div>
+
         {/* Personal Information */}
         <div className="glass-panel p-6 space-y-4 resume-section">
           <h2 className="text-2xl font-semibold text-white mb-4">Personal Information</h2>
@@ -122,10 +119,10 @@ const ResumeBuilder = () => {
         <div className="glass-panel p-6 resume-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold text-white">Experience</h2>
-            <button onClick={addExperience} className="glass-button flex items-center gap-2">
+            <Button onClick={addExperience} className="glass-button flex items-center gap-2">
               <Plus size={20} />
               Add Experience
-            </button>
+            </Button>
           </div>
           <div className="space-y-6">
             {experiences.map((exp) => (
@@ -175,10 +172,10 @@ const ResumeBuilder = () => {
         <div className="glass-panel p-6 resume-section">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-semibold text-white">Education</h2>
-            <button onClick={addEducation} className="glass-button flex items-center gap-2">
+            <Button onClick={addEducation} className="glass-button flex items-center gap-2">
               <Plus size={20} />
               Add Education
-            </button>
+            </Button>
           </div>
           <div className="space-y-6">
             {education.map((edu) => (
@@ -226,13 +223,44 @@ const ResumeBuilder = () => {
             {skills.map((skill, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-white/20 rounded-full text-sm"
+                className="px-3 py-1 bg-white/20 rounded-full text-sm text-white"
               >
                 {skill}
               </span>
             ))}
           </div>
         </div>
+
+        {/* Compile Resume Button */}
+        <div className="flex justify-center">
+          <Button
+            onClick={handleCompileResume}
+            className="glass-button flex items-center gap-2 px-8 py-4 text-lg"
+          >
+            <FileText size={24} />
+            Compile Resume
+          </Button>
+        </div>
+
+        {/* Preview and LaTeX sections */}
+        {showPreview && (
+          <div className="space-y-8">
+            <ResumePreview
+              personalInfo={personalInfo}
+              experiences={experiences}
+              education={education}
+              skills={skills}
+              template={selectedTemplate}
+            />
+            <LatexEditor
+              personalInfo={personalInfo}
+              experiences={experiences}
+              education={education}
+              skills={skills}
+              template={selectedTemplate}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
