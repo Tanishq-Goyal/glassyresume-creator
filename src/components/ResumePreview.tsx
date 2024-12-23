@@ -8,10 +8,24 @@ interface ResumePreviewProps {
   experiences: Experience[];
   education: Education[];
   skills: string[];
+  projects: any[];
+  achievements: string[];
+  positions: any[];
+  optionalSections: any[];
   template: string;
 }
 
-const ResumePreview = ({ personalInfo, experiences, education, skills, template }: ResumePreviewProps) => {
+const ResumePreview = ({ 
+  personalInfo, 
+  experiences, 
+  education, 
+  skills,
+  projects,
+  achievements,
+  positions,
+  optionalSections,
+  template 
+}: ResumePreviewProps) => {
   const handleDownload = () => {
     // TODO: Implement PDF generation and download
     console.log('Downloading PDF...');
@@ -59,6 +73,50 @@ const ResumePreview = ({ personalInfo, experiences, education, skills, template 
             </div>
           ))}
         </div>
+
+        {projects.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Projects</h2>
+            {projects.map((project, index) => (
+              <div key={index} className="mb-4">
+                <h3 className="font-semibold">{project.title}</h3>
+                <p className="mt-2">{project.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {achievements.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Achievements</h2>
+            {achievements.map((achievement, index) => (
+              <div key={index} className="mb-4">
+                <p>{achievement}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {positions.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4 border-b pb-2">Positions of Responsibility</h2>
+            {positions.map((position, index) => (
+              <div key={index} className="mb-4">
+                <h3 className="font-semibold">{position.title}</h3>
+                <p className="mt-2">{position.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {optionalSections.length > 0 && (
+          optionalSections.map((section, index) => (
+            <div key={index} className="mb-8">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">{section.type}</h2>
+              <p>{section.content}</p>
+            </div>
+          ))
+        )}
 
         <div>
           <h2 className="text-xl font-semibold mb-4 border-b pb-2">Skills</h2>
