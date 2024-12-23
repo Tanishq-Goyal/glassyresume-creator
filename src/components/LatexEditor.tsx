@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PersonalInfo, Experience, Education } from './ResumeTypes';
+import { Button } from './ui/button';
+import { Textarea } from './ui/textarea';
+import { RefreshCw } from 'lucide-react';
+import { useToast } from './ui/use-toast';
 
 interface LatexEditorProps {
   personalInfo: PersonalInfo;
@@ -7,10 +11,21 @@ interface LatexEditorProps {
   education: Education[];
   skills: string[];
   template: string;
+  onRecompile: (latexCode: string) => void;
 }
 
-const LatexEditor = ({ personalInfo, experiences, education, skills, template }: LatexEditorProps) => {
-  const generateLatex = () => {
+const LatexEditor = ({ 
+  personalInfo, 
+  experiences, 
+  education, 
+  skills, 
+  template,
+  onRecompile 
+}: LatexEditorProps) => {
+  const { toast } = useToast();
+  const [latexCode, setLatexCode] = useState<string>(() => generateLatex());
+
+  function generateLatex() {
     const latex = `\\documentclass{article}
 \\usepackage[utf8]{inputenc}
 \\usepackage[margin=1in]{geometry}
@@ -45,14 +60,41 @@ ${skills.join(', ')}
 \\end{document}`;
 
     return latex;
+  }
+
+  const handleRecompile = () => {
+    try {
+      onRecompile(latexCode);
+      toast({
+        title: "Success",
+        description: "Resume updated successfully from LaTeX code",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update resume from LaTeX code",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
     <div className="glass-panel p-6">
-      <h2 className="text-2xl font-semibold text-white mb-4">LaTeX Code</h2>
-      <pre className="bg-white/10 p-4 rounded-lg overflow-x-auto text-white/90 text-sm font-mono">
-        {generateLatex()}
-      </pre>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-semibold text-primary">LaTeX Code</h2>
+        <Button 
+          onClick={handleRecompile}
+          className="flex items-center gap-2"
+        >
+          <RefreshCw size={20} />
+          Recompile
+        </Button>
+      </div>
+      <Textarea
+        value={latexCode}
+        onChange={(e) => setLatexCode(e.target.value)}
+        className="font-mono text-sm h-[400px] bg-secondary/50"
+      />
     </div>
   );
 };

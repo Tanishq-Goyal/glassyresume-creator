@@ -1,21 +1,28 @@
 import React from 'react';
-import { FileText } from 'lucide-react';
+import { FileText, Github } from 'lucide-react';
 
 const Header = () => {
   return (
-    <header className="w-full bg-white/10 backdrop-blur-lg border-b border-white/20 py-4 mb-8">
-      <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <FileText className="h-8 w-8 text-blue-200" />
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
-            Glassy Resume Builder
-          </h1>
+    <header className="glass-panel p-6 mb-8">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+        <div className="flex items-center gap-4 mb-4 md:mb-0">
+          <FileText size={32} className="text-primary" />
+          <div>
+            <h1 className="text-2xl font-bold text-primary">Resume Builder Pro</h1>
+            <p className="text-muted-foreground">Create professional resumes with LaTeX support</p>
+          </div>
         </div>
-        <nav className="flex gap-6">
-          <a href="#templates" className="text-white/80 hover:text-white transition-colors">Templates</a>
-          <a href="#builder" className="text-white/80 hover:text-white transition-colors">Builder</a>
-          <a href="#preview" className="text-white/80 hover:text-white transition-colors">Preview</a>
-        </nav>
+        <div className="flex items-center gap-4">
+          <a 
+            href="https://github.com/yourusername/resume-builder"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+          >
+            <Github size={20} />
+            <span>View on GitHub</span>
+          </a>
+        </div>
       </div>
     </header>
   );

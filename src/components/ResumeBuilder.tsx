@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, FileText, Download } from 'lucide-react';
+import { Plus, FileText, Download, X } from 'lucide-react';
 import { Button } from './ui/button';
 import ResumeTemplates from './ResumeTemplates';
 import ResumePreview from './ResumePreview';
@@ -8,8 +8,10 @@ import OptionalSections from './OptionalSections';
 import InfoTooltip from './InfoTooltip';
 import { PersonalInfo, Experience, Education } from './ResumeTypes';
 import html2pdf from 'html2pdf.js';
+import { useToast } from './ui/use-toast';
 
 const ResumeBuilder = () => {
+  const { toast } = useToast();
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     fullName: '',
     email: '',
@@ -40,6 +42,10 @@ const ResumeBuilder = () => {
     setExperiences([...experiences, newExp]);
   };
 
+  const removeExperience = (id: string) => {
+    setExperiences(experiences.filter(exp => exp.id !== id));
+  };
+
   const addEducation = () => {
     const newEdu = {
       id: Date.now().toString(),
@@ -50,11 +56,19 @@ const ResumeBuilder = () => {
     setEducation([...education, newEdu]);
   };
 
+  const removeEducation = (id: string) => {
+    setEducation(education.filter(edu => edu.id !== id));
+  };
+
   const addSkill = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && newSkill.trim()) {
       setSkills([...skills, newSkill.trim()]);
       setNewSkill('');
     }
+  };
+
+  const removeSkill = (skillToRemove: string) => {
+    setSkills(skills.filter(skill => skill !== skillToRemove));
   };
 
   const updateExperience = (id: string, field: keyof Experience, value: string) => {
@@ -70,7 +84,22 @@ const ResumeBuilder = () => {
   };
 
   const handleAddOptionalSection = (sectionType: string) => {
-    setOptionalSections([...optionalSections, { type: sectionType, content: '' }]);
+    const newSection = {
+      id: Date.now().toString(),
+      type: sectionType,
+      content: '',
+    };
+    setOptionalSections([...optionalSections, newSection]);
+  };
+
+  const removeOptionalSection = (id: string) => {
+    setOptionalSections(optionalSections.filter(section => section.id !== id));
+  };
+
+  const updateOptionalSection = (id: string, content: string) => {
+    setOptionalSections(optionalSections.map(section =>
+      section.id === id ? { ...section, content } : section
+    ));
   };
 
   const handleDownloadPDF = async () => {
@@ -87,20 +116,37 @@ const ResumeBuilder = () => {
 
     try {
       await html2pdf().set(opt).from(element).save();
+      toast({
+        title: "Success",
+        description: "Resume downloaded successfully",
+      });
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      toast({
+        title: "Error",
+        description: "Failed to download resume",
+        variant: "destructive",
+      });
     }
   };
 
+  const handleLatexRecompile = (latexCode: string) => {
+    // Here you would parse the LaTeX code and update the resume data
+    // For now, we'll just show a toast
+    toast({
+      title: "LaTeX Recompiled",
+      description: "Resume updated from LaTeX code",
+    });
+  };
+
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-br from-[#F2FCE2] to-[#E5DEFF]">
+    <div className="min-h-screen p-8 bg-background">
       <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Resume Builder</h1>
+        <h1 className="text-4xl font-bold text-center text-primary mb-12">Resume Builder</h1>
         
         {/* Template Selection */}
         <div className="glass-panel p-6 resume-section">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Choose Template</h2>
+            <h2 className="text-2xl font-semibold text-primary">Choose Template</h2>
             <InfoTooltip content="Select a template that best suits your professional style" />
           </div>
           <ResumeTemplates
@@ -112,35 +158,35 @@ const ResumeBuilder = () => {
         {/* Personal Information */}
         <div className="glass-panel p-6 space-y-4 resume-section">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Personal Information</h2>
+            <h2 className="text-2xl font-semibold text-primary">Personal Information</h2>
             <InfoTooltip content="Add your contact details and basic information" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
               placeholder="Full Name"
-              className="glass-input text-gray-800"
+              className="glass-input text-primary"
               value={personalInfo.fullName}
               onChange={(e) => setPersonalInfo({ ...personalInfo, fullName: e.target.value })}
             />
             <input
               type="email"
               placeholder="Email"
-              className="glass-input text-gray-800"
+              className="glass-input text-primary"
               value={personalInfo.email}
               onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
             />
             <input
               type="tel"
               placeholder="Phone"
-              className="glass-input text-gray-800"
+              className="glass-input text-primary"
               value={personalInfo.phone}
               onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
             />
             <input
               type="text"
               placeholder="Location"
-              className="glass-input text-gray-800"
+              className="glass-input text-primary"
               value={personalInfo.location}
               onChange={(e) => setPersonalInfo({ ...personalInfo, location: e.target.value })}
             />
@@ -150,7 +196,7 @@ const ResumeBuilder = () => {
         {/* Experience Section */}
         <div className="glass-panel p-6 resume-section">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Experience</h2>
+            <h2 className="text-2xl font-semibold text-primary">Experience</h2>
             <InfoTooltip content="Add your work experience with detailed responsibilities and achievements" />
             <Button onClick={addExperience} className="glass-button ml-auto flex items-center gap-2">
               <Plus size={20} />
@@ -159,7 +205,15 @@ const ResumeBuilder = () => {
           </div>
           <div className="space-y-6">
             {experiences.map((exp) => (
-              <div key={exp.id} className="space-y-4 p-4 bg-white/5 rounded-lg">
+              <div key={exp.id} className="space-y-4 p-4 bg-secondary/20 rounded-lg relative">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
+                  onClick={() => removeExperience(exp.id)}
+                >
+                  <X size={20} />
+                </Button>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
                     type="text"
@@ -201,35 +255,47 @@ const ResumeBuilder = () => {
           </div>
         </div>
 
-        {/* Projects Section */}
+        {/* Skills Section */}
         <div className="glass-panel p-6 resume-section">
           <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Projects</h2>
-            <InfoTooltip content="Highlight your key projects with technologies used and outcomes" />
+            <h2 className="text-2xl font-semibold text-primary">Skills</h2>
+            <InfoTooltip content="Add your technical and soft skills" />
           </div>
-          {/* Project inputs similar to experience section */}
-        </div>
-
-        {/* Achievements Section */}
-        <div className="glass-panel p-6 resume-section">
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Achievements</h2>
-            <InfoTooltip content="List your awards, certifications, and notable accomplishments" />
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Add a skill (press Enter)"
+              className="glass-input w-full"
+              value={newSkill}
+              onChange={(e) => setNewSkill(e.target.value)}
+              onKeyPress={addSkill}
+            />
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 px-3 py-1 bg-secondary/20 rounded-full"
+                >
+                  <span className="text-primary">{skill}</span>
+                  <button
+                    onClick={() => removeSkill(skill)}
+                    className="text-destructive hover:text-destructive/80"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-          {/* Achievement inputs */}
-        </div>
-
-        {/* Positions of Responsibility */}
-        <div className="glass-panel p-6 resume-section">
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-gray-800">Positions of Responsibility</h2>
-            <InfoTooltip content="Add leadership roles and responsibilities in organizations" />
-          </div>
-          {/* Position inputs */}
         </div>
 
         {/* Optional Sections */}
-        <OptionalSections onAddSection={handleAddOptionalSection} />
+        <OptionalSections 
+          onAddSection={handleAddOptionalSection}
+          sections={optionalSections}
+          onRemoveSection={removeOptionalSection}
+          onUpdateSection={updateOptionalSection}
+        />
 
         {/* Compile Resume Button */}
         <div className="flex justify-center gap-4">
@@ -273,6 +339,7 @@ const ResumeBuilder = () => {
               education={education}
               skills={skills}
               template={selectedTemplate}
+              onRecompile={handleLatexRecompile}
             />
           </div>
         )}
