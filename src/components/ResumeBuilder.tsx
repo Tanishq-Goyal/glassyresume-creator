@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, FileText, Download, X } from 'lucide-react';
 import { Button } from './ui/button';
-import ResumeTemplates from './ResumeTemplates';
+import TemplateSelector from './resume/TemplateSelector';
 import ResumePreview from './ResumePreview';
 import LatexEditor from './LatexEditor';
 import OptionalSections from './OptionalSections';
@@ -130,8 +130,6 @@ const ResumeBuilder = () => {
   };
 
   const handleLatexRecompile = (latexCode: string) => {
-    // Here you would parse the LaTeX code and update the resume data
-    // For now, we'll just show a toast
     toast({
       title: "LaTeX Recompiled",
       description: "Resume updated from LaTeX code",
@@ -143,19 +141,11 @@ const ResumeBuilder = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         <h1 className="text-4xl font-bold text-center text-primary mb-12">Resume Builder</h1>
         
-        {/* Template Selection */}
-        <div className="glass-panel p-6 resume-section">
-          <div className="flex items-center gap-2 mb-4">
-            <h2 className="text-2xl font-semibold text-primary">Choose Template</h2>
-            <InfoTooltip content="Select a template that best suits your professional style" />
-          </div>
-          <ResumeTemplates
-            selectedTemplate={selectedTemplate}
-            onSelectTemplate={setSelectedTemplate}
-          />
-        </div>
+        <TemplateSelector
+          selectedTemplate={selectedTemplate}
+          onSelectTemplate={setSelectedTemplate}
+        />
 
-        {/* Personal Information */}
         <div className="glass-panel p-6 space-y-4 resume-section">
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-2xl font-semibold text-primary">Personal Information</h2>
@@ -193,7 +183,6 @@ const ResumeBuilder = () => {
           </div>
         </div>
 
-        {/* Experience Section */}
         <div className="glass-panel p-6 resume-section">
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-2xl font-semibold text-primary">Experience</h2>
@@ -255,7 +244,6 @@ const ResumeBuilder = () => {
           </div>
         </div>
 
-        {/* Skills Section */}
         <div className="glass-panel p-6 resume-section">
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-2xl font-semibold text-primary">Skills</h2>
@@ -289,7 +277,6 @@ const ResumeBuilder = () => {
           </div>
         </div>
 
-        {/* Optional Sections */}
         <OptionalSections 
           onAddSection={handleAddOptionalSection}
           sections={optionalSections}
@@ -297,8 +284,7 @@ const ResumeBuilder = () => {
           onUpdateSection={updateOptionalSection}
         />
 
-        {/* Compile Resume Button */}
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center">
           <Button
             onClick={() => setShowPreview(true)}
             className="glass-button flex items-center gap-2 px-8 py-4 text-lg"
@@ -306,18 +292,8 @@ const ResumeBuilder = () => {
             <FileText size={24} />
             Preview Resume
           </Button>
-          {showPreview && (
-            <Button
-              onClick={handleDownloadPDF}
-              className="glass-button flex items-center gap-2 px-8 py-4 text-lg"
-            >
-              <Download size={24} />
-              Download PDF
-            </Button>
-          )}
         </div>
 
-        {/* Preview and LaTeX sections */}
         {showPreview && (
           <div className="space-y-8">
             <div id="resume-preview">
@@ -326,12 +302,18 @@ const ResumeBuilder = () => {
                 experiences={experiences}
                 education={education}
                 skills={skills}
-                projects={projects}
-                achievements={achievements}
-                positions={positions}
-                optionalSections={optionalSections}
                 template={selectedTemplate}
+                optionalSections={optionalSections}
               />
+            </div>
+            <div className="flex justify-end">
+              <Button
+                onClick={handleDownloadPDF}
+                className="glass-button flex items-center gap-2"
+              >
+                <Download size={20} />
+                Download PDF
+              </Button>
             </div>
             <LatexEditor
               personalInfo={personalInfo}
