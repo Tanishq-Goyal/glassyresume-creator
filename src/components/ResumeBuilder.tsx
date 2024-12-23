@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Plus, FileText } from 'lucide-react';
+import { Plus, FileText, Download } from 'lucide-react';
 import { Button } from './ui/button';
 import ResumeTemplates from './ResumeTemplates';
 import ResumePreview from './ResumePreview';
 import LatexEditor from './LatexEditor';
+import OptionalSections from './OptionalSections';
+import InfoTooltip from './InfoTooltip';
 import { PersonalInfo, Experience, Education } from './ResumeTypes';
+import html2pdf from 'html2pdf.js';
 
 const ResumeBuilder = () => {
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
@@ -17,6 +20,10 @@ const ResumeBuilder = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [education, setEducation] = useState<Education[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [achievements, setAchievements] = useState<string[]>([]);
+  const [positions, setPositions] = useState<any[]>([]);
+  const [optionalSections, setOptionalSections] = useState<any[]>([]);
   const [newSkill, setNewSkill] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [showPreview, setShowPreview] = useState(false);
@@ -62,18 +69,40 @@ const ResumeBuilder = () => {
     ));
   };
 
-  const handleCompileResume = () => {
-    setShowPreview(true);
+  const handleAddOptionalSection = (sectionType: string) => {
+    setOptionalSections([...optionalSections, { type: sectionType, content: '' }]);
+  };
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('resume-preview');
+    if (!element) return;
+
+    const opt = {
+      margin: 1,
+      filename: `${personalInfo.fullName.toLowerCase().replace(/\s+/g, '_')}_resume.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    try {
+      await html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-br from-blue-900 to-purple-900">
+    <div className="min-h-screen p-8 bg-gradient-to-br from-[#F2FCE2] to-[#E5DEFF]">
       <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-4xl font-bold text-center text-white mb-12">Resume Builder</h1>
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Resume Builder</h1>
         
         {/* Template Selection */}
         <div className="glass-panel p-6 resume-section">
-          <h2 className="text-2xl font-semibold text-white mb-4">Choose Template</h2>
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800">Choose Template</h2>
+            <InfoTooltip content="Select a template that best suits your professional style" />
+          </div>
           <ResumeTemplates
             selectedTemplate={selectedTemplate}
             onSelectTemplate={setSelectedTemplate}
@@ -82,33 +111,36 @@ const ResumeBuilder = () => {
 
         {/* Personal Information */}
         <div className="glass-panel p-6 space-y-4 resume-section">
-          <h2 className="text-2xl font-semibold text-white mb-4">Personal Information</h2>
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800">Personal Information</h2>
+            <InfoTooltip content="Add your contact details and basic information" />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
               placeholder="Full Name"
-              className="glass-input"
+              className="glass-input text-gray-800"
               value={personalInfo.fullName}
               onChange={(e) => setPersonalInfo({ ...personalInfo, fullName: e.target.value })}
             />
             <input
               type="email"
               placeholder="Email"
-              className="glass-input"
+              className="glass-input text-gray-800"
               value={personalInfo.email}
               onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
             />
             <input
               type="tel"
               placeholder="Phone"
-              className="glass-input"
+              className="glass-input text-gray-800"
               value={personalInfo.phone}
               onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
             />
             <input
               type="text"
               placeholder="Location"
-              className="glass-input"
+              className="glass-input text-gray-800"
               value={personalInfo.location}
               onChange={(e) => setPersonalInfo({ ...personalInfo, location: e.target.value })}
             />
@@ -117,9 +149,10 @@ const ResumeBuilder = () => {
 
         {/* Experience Section */}
         <div className="glass-panel p-6 resume-section">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-white">Experience</h2>
-            <Button onClick={addExperience} className="glass-button flex items-center gap-2">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800">Experience</h2>
+            <InfoTooltip content="Add your work experience with detailed responsibilities and achievements" />
+            <Button onClick={addExperience} className="glass-button ml-auto flex items-center gap-2">
               <Plus size={20} />
               Add Experience
             </Button>
@@ -168,90 +201,72 @@ const ResumeBuilder = () => {
           </div>
         </div>
 
-        {/* Education Section */}
+        {/* Projects Section */}
         <div className="glass-panel p-6 resume-section">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-white">Education</h2>
-            <Button onClick={addEducation} className="glass-button flex items-center gap-2">
-              <Plus size={20} />
-              Add Education
-            </Button>
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800">Projects</h2>
+            <InfoTooltip content="Highlight your key projects with technologies used and outcomes" />
           </div>
-          <div className="space-y-6">
-            {education.map((edu) => (
-              <div key={edu.id} className="space-y-4 p-4 bg-white/5 rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Degree"
-                    className="glass-input"
-                    value={edu.degree}
-                    onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="School"
-                    className="glass-input"
-                    value={edu.school}
-                    onChange={(e) => updateEducation(edu.id, 'school', e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Year"
-                    className="glass-input"
-                    value={edu.year}
-                    onChange={(e) => updateEducation(edu.id, 'year', e.target.value)}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Project inputs similar to experience section */}
         </div>
 
-        {/* Skills Section */}
+        {/* Achievements Section */}
         <div className="glass-panel p-6 resume-section">
-          <h2 className="text-2xl font-semibold text-white mb-4">Skills</h2>
-          <input
-            type="text"
-            placeholder="Add a skill and press Enter"
-            className="glass-input w-full mb-4"
-            value={newSkill}
-            onChange={(e) => setNewSkill(e.target.value)}
-            onKeyPress={addSkill}
-          />
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-white/20 rounded-full text-sm text-white"
-              >
-                {skill}
-              </span>
-            ))}
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800">Achievements</h2>
+            <InfoTooltip content="List your awards, certifications, and notable accomplishments" />
           </div>
+          {/* Achievement inputs */}
         </div>
+
+        {/* Positions of Responsibility */}
+        <div className="glass-panel p-6 resume-section">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800">Positions of Responsibility</h2>
+            <InfoTooltip content="Add leadership roles and responsibilities in organizations" />
+          </div>
+          {/* Position inputs */}
+        </div>
+
+        {/* Optional Sections */}
+        <OptionalSections onAddSection={handleAddOptionalSection} />
 
         {/* Compile Resume Button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
           <Button
-            onClick={handleCompileResume}
+            onClick={() => setShowPreview(true)}
             className="glass-button flex items-center gap-2 px-8 py-4 text-lg"
           >
             <FileText size={24} />
-            Compile Resume
+            Preview Resume
           </Button>
+          {showPreview && (
+            <Button
+              onClick={handleDownloadPDF}
+              className="glass-button flex items-center gap-2 px-8 py-4 text-lg"
+            >
+              <Download size={24} />
+              Download PDF
+            </Button>
+          )}
         </div>
 
         {/* Preview and LaTeX sections */}
         {showPreview && (
           <div className="space-y-8">
-            <ResumePreview
-              personalInfo={personalInfo}
-              experiences={experiences}
-              education={education}
-              skills={skills}
-              template={selectedTemplate}
-            />
+            <div id="resume-preview">
+              <ResumePreview
+                personalInfo={personalInfo}
+                experiences={experiences}
+                education={education}
+                skills={skills}
+                projects={projects}
+                achievements={achievements}
+                positions={positions}
+                optionalSections={optionalSections}
+                template={selectedTemplate}
+              />
+            </div>
             <LatexEditor
               personalInfo={personalInfo}
               experiences={experiences}
