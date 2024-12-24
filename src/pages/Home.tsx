@@ -1,8 +1,7 @@
 import React from 'react';
+import Layout from '@/components/Layout';
 import { Link } from 'react-router-dom';
 import { FileText, Star, Award, Upload, HelpCircle, CheckCircle } from 'lucide-react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 const Home = () => {
   const jobCategories = [
@@ -88,60 +87,58 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-950 to-blue-900">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-12 space-y-24">
-        {/* Hero Section */}
-        <section className="text-center space-y-6">
-          <h1 className="text-5xl font-bold text-blue-100">Build a professional resume for free</h1>
-          <p className="text-xl text-blue-200">Create your resume easily with our free builder and professional templates.</p>
-          <Link to="/builder" className="glass-button text-lg px-8 py-4 inline-block">
-            Create Your Resume Now
-          </Link>
-        </section>
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-b from-blue-950 to-blue-900">
+        <main className="container mx-auto px-4 py-12 space-y-24">
+          {/* Hero Section */}
+          <section className="text-center space-y-6">
+            <h1 className="text-5xl font-bold text-blue-100">Build a professional resume for free</h1>
+            <p className="text-xl text-blue-200">Create your resume easily with our free builder and professional templates.</p>
+            <Link to="/builder" className="glass-button text-lg px-8 py-4 inline-block">
+              Create Your Resume Now
+            </Link>
+          </section>
 
-        {/* Features Grid */}
-        <section className="grid md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div key={index} className="glass-panel p-6 space-y-4">
-              <div className="flex justify-center">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-center text-blue-100">{feature.title}</h3>
-              <p className="text-blue-200 text-center">{feature.description}</p>
+          {/* Features Grid */}
+          <section className="grid md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="glass-panel p-6 space-y-4">
+                <div className="flex justify-center">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-center text-blue-100">{feature.title}</h3>
+                <p className="text-blue-200 text-center">{feature.description}</p>
+              </div>
+            ))}
+          </section>
+
+          {/* Job Categories */}
+          <section className="space-y-8">
+            <h2 className="text-3xl font-bold text-center text-blue-100">Resume Samples by Category</h2>
+            <div className="grid md:grid-cols-4 gap-6">
+              {jobCategories.map((category, index) => (
+                <div key={index} className="glass-panel p-4 text-center space-y-2">
+                  <span className="text-4xl">{category.emoji}</span>
+                  <h3 className="text-lg font-medium text-blue-100">{category.title}</h3>
+                  <p className="text-blue-200">{category.count} templates</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </section>
+          </section>
 
-        {/* Job Categories */}
-        <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-blue-100">Resume Samples by Category</h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            {jobCategories.map((category, index) => (
-              <div key={index} className="glass-panel p-4 text-center space-y-2">
-                <span className="text-4xl">{category.emoji}</span>
-                <h3 className="text-lg font-medium text-blue-100">{category.title}</h3>
-                <p className="text-blue-200">{category.count} templates</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* FAQs */}
-        <section className="space-y-8">
-          <h2 className="text-3xl font-bold text-center text-blue-100">Frequently Asked Questions</h2>
-          <div className="max-w-3xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
-              <div key={index} className="glass-panel p-6">
-                <h3 className="text-xl font-semibold text-blue-100 mb-2">{faq.question}</h3>
-                <p className="text-blue-200">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <Footer />
-    </div>
+          {/* FAQs */}
+          <section className="space-y-8">
+            <h2 className="text-3xl font-bold text-center text-blue-100">Frequently Asked Questions</h2>
+            <div className="max-w-3xl mx-auto space-y-6">
+              {faqs.map((faq, index) => (
+                <div key={index} className="glass-panel p-6">
+                  <h3 className="text-xl font-semibold text-blue-100 mb-2">{faq.question}</h3>
+                  <p className="text-blue-200">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </main>
+      </div>
+    </Layout>
   );
 };
 
