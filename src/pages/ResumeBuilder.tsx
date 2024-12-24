@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import DraggableSection from '@/components/DraggableSection';
-import { Plus, FileText, Download, X } from 'lucide-react';
+import { FileText, Download } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import TemplateSelector from "@/components/resume/TemplateSelector";
@@ -13,6 +13,8 @@ import OptionalSections from "@/components/OptionalSections";
 import InfoTooltip from "@/components/InfoTooltip";
 import { PersonalInfo, Experience, Education } from "@/components/ResumeTypes";
 import html2pdf from 'html2pdf.js';
+import PhoneInput from '@/components/resume/PhoneInput';
+import ExperienceSection from '@/components/resume/ExperienceSection';
 
 const ResumeBuilder = () => {
   const { toast } = useToast();
@@ -199,12 +201,9 @@ const ResumeBuilder = () => {
                           value={personalInfo.email}
                           onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
                         />
-                        <input
-                          type="tel"
-                          placeholder="Phone"
-                          className="glass-input text-primary"
+                        <PhoneInput
                           value={personalInfo.phone}
-                          onChange={(e) => setPersonalInfo({ ...personalInfo, phone: e.target.value })}
+                          onChange={(value) => setPersonalInfo({ ...personalInfo, phone: value })}
                         />
                         <input
                           type="text"
@@ -266,66 +265,12 @@ const ResumeBuilder = () => {
                     </div>
                   )}
                   {section === 'experience' && (
-                    <div className="glass-panel p-6 resume-section">
-                      <div className="flex items-center gap-2 mb-4">
-                        <h2 className="text-2xl font-semibold text-primary">Experience</h2>
-                        <InfoTooltip content="Add your work experience with detailed responsibilities and achievements" />
-                        <Button onClick={addExperience} className="glass-button ml-auto flex items-center gap-2">
-                          <Plus size={20} />
-                          Add Experience
-                        </Button>
-                      </div>
-                      <div className="space-y-6">
-                        {experiences.map((exp) => (
-                          <div key={exp.id} className="space-y-4 p-4 bg-secondary/20 rounded-lg relative">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
-                              onClick={() => removeExperience(exp.id)}
-                            >
-                              <X size={20} />
-                            </Button>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <input
-                                type="text"
-                                placeholder="Job Title"
-                                className="glass-input"
-                                value={exp.title}
-                                onChange={(e) => updateExperience(exp.id, 'title', e.target.value)}
-                              />
-                              <input
-                                type="text"
-                                placeholder="Company"
-                                className="glass-input"
-                                value={exp.company}
-                                onChange={(e) => updateExperience(exp.id, 'company', e.target.value)}
-                              />
-                              <input
-                                type="text"
-                                placeholder="Start Date"
-                                className="glass-input"
-                                value={exp.startDate}
-                                onChange={(e) => updateExperience(exp.id, 'startDate', e.target.value)}
-                              />
-                              <input
-                                type="text"
-                                placeholder="End Date"
-                                className="glass-input"
-                                value={exp.endDate}
-                                onChange={(e) => updateExperience(exp.id, 'endDate', e.target.value)}
-                              />
-                            </div>
-                            <textarea
-                              placeholder="Description"
-                              className="glass-input w-full h-24"
-                              value={exp.description}
-                              onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <ExperienceSection
+                      experiences={experiences}
+                      onAddExperience={addExperience}
+                      onRemoveExperience={removeExperience}
+                      onUpdateExperience={updateExperience}
+                    />
                   )}
                   {section === 'skills' && (
                     <div className="glass-panel p-6 resume-section">
