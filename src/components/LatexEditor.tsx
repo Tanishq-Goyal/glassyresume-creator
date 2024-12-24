@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PersonalInfo, Experience, Education } from './ResumeTypes';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
