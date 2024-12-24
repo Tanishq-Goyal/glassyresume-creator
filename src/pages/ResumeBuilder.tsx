@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import DraggableSection from '@/components/DraggableSection';
-import { FileText, Download } from 'lucide-react';
+import { FileText, Download, Plus, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import TemplateSelector from "@/components/resume/TemplateSelector";
