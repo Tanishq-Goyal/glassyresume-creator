@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Plus, FileText, Download, X } from 'lucide-react';
-import { Button } from './ui/button';
-import TemplateSelector from './resume/TemplateSelector';
-import ResumePreview from './ResumePreview';
-import LatexEditor from './LatexEditor';
-import OptionalSections from './OptionalSections';
-import InfoTooltip from './InfoTooltip';
-import { PersonalInfo, Experience, Education } from './ResumeTypes';
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import TemplateSelector from "@/components/resume/TemplateSelector";
+import ResumePreview from "@/components/ResumePreview";
+import LatexEditor from "@/components/LatexEditor";
+import OptionalSections from "@/components/OptionalSections";
+import InfoTooltip from "@/components/InfoTooltip";
+import { PersonalInfo, Experience, Education } from "@/components/ResumeTypes";
 import html2pdf from 'html2pdf.js';
-import { useToast } from './ui/use-toast';
 
 const ResumeBuilder = () => {
   const { toast } = useToast();
@@ -331,4 +331,3 @@ const ResumeBuilder = () => {
 };
 
 export default ResumeBuilder;
-

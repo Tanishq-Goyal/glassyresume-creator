@@ -1,7 +1,7 @@
 import React from 'react';
-import ResumeBuilder from "../components/ResumeBuilder";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import ResumeBuilder from "@/pages/ResumeBuilder";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
