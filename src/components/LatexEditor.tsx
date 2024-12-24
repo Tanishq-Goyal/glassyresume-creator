@@ -26,35 +26,81 @@ const LatexEditor = ({
   const [latexCode, setLatexCode] = useState<string>(() => generateLatex());
 
   function generateLatex() {
-    const latex = `\\documentclass{article}
-\\usepackage[utf8]{inputenc}
-\\usepackage[margin=1in]{geometry}
+    const latex = `\\documentclass[10pt,a4paper]{article}
+
+% Required packages
+\\usepackage[top=0.15in, bottom=0.15in, left=0.15in, right=0.15in]{geometry}
+\\usepackage{enumitem}
+\\usepackage{titlesec}
+\\usepackage{hyperref}
+\\usepackage{fontawesome5}
+\\usepackage{xcolor}
+\\usepackage{array}
+\\usepackage{tabularx}
+\\usepackage{graphicx}
+\\usepackage{wrapfig}
+\\usepackage{helvet}
+\\renewcommand{\\familydefault}{\\sfdefault}
+
+% Define colors
+\\definecolor{sectionblue}{RGB}{220,230,242}
+\\definecolor{linkblue}{RGB}{0,0,255}
+
+% Configure hyperlinks
+\\hypersetup{
+    colorlinks=true,
+    linkcolor=linkblue,
+    urlcolor=linkblue
+}
+
+% Custom section style
+\\newcommand{\\customsection}[1]{%
+    \\vspace{0.3em}
+    \\noindent\\colorbox{sectionblue}{\\parbox{\\dimexpr\\textwidth-2\\fboxsep}{
+        \\vspace{0.1em}\\centering\\textbf{\\fontsize{10}{12}\\selectfont #1}\\vspace{0.1em}
+    }}
+    \\vspace{0.3em}
+}
+
+% Remove section numbering
+\\renewcommand{\\thesection}{}
+
+% Custom bullet style
+\\renewcommand{\\labelitemi}{$\\bullet$}
+
+% Adjust itemize spacing and remove indentation
+\\setlist[itemize]{topsep=0pt,itemsep=0.1em,partopsep=0pt,parsep=0pt,leftmargin=*}
+\\setlength{\\parindent}{0pt}
 
 \\begin{document}
 
-\\section*{${personalInfo.fullName}}
+\\begin{center}
+\\textbf{\\Large ${personalInfo.fullName}}\\\\
 ${personalInfo.email} • ${personalInfo.phone} • ${personalInfo.location}
+\\end{center}
 
-\\section*{Experience}
+\\customsection{Experience}
 ${experiences
   .map(
-    (exp) => `\\subsection*{${exp.company}}
-${exp.title} (${exp.startDate} - ${exp.endDate})
+    (exp) => `\\textbf{${exp.company}} \\hfill ${exp.startDate} - ${exp.endDate}\\\\
+\\textit{${exp.title}}\\\\
 ${exp.description}
+
 `
   )
   .join('\n')}
 
-\\section*{Education}
+\\customsection{Education}
 ${education
   .map(
-    (edu) => `\\subsection*{${edu.school}}
-${edu.degree} (${edu.year})
+    (edu) => `\\textbf{${edu.school}} \\hfill ${edu.year}\\\\
+${edu.degree}
+
 `
   )
   .join('\n')}
 
-\\section*{Skills}
+\\customsection{Skills}
 ${skills.join(', ')}
 
 \\end{document}`;
