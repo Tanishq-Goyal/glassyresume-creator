@@ -29,6 +29,31 @@ const OptionalSections = ({
       tooltip: 'List languages you know and your proficiency level'
     },
     {
+      id: 'certifications',
+      name: 'Certifications',
+      tooltip: 'Add your professional certifications and achievements'
+    },
+    {
+      id: 'publications',
+      name: 'Publications',
+      tooltip: 'List your published works and research papers'
+    },
+    {
+      id: 'awards',
+      name: 'Awards',
+      tooltip: 'Showcase your awards and recognition'
+    },
+    {
+      id: 'volunteer',
+      name: 'Volunteer Work',
+      tooltip: 'Add your volunteer experience and community service'
+    },
+    {
+      id: 'projects',
+      name: 'Projects',
+      tooltip: 'Highlight your key projects and their outcomes'
+    },
+    {
       id: 'custom',
       name: 'Custom Section',
       tooltip: 'Add any additional section that fits your needs'

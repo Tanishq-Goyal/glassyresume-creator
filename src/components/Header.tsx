@@ -1,38 +1,28 @@
 import React from 'react';
-import { FileText, Github, BookOpen } from 'lucide-react';
+import { FileText, Home } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <header className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 border-b border-blue-700">
+    <header className="bg-gradient-to-r from-cyan-500 via-cyan-400 to-blue-400 border-b border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-4">
-            <FileText size={32} className="text-blue-100" />
+          <Link to="/" className="flex items-center gap-4 group">
+            <FileText size={32} className="text-white group-hover:scale-110 transition-transform" />
             <div>
-              <h1 className="text-2xl font-bold text-blue-100">Resume Builder Pro</h1>
-              <p className="text-blue-200 text-sm">Create professional resumes with LaTeX support</p>
+              <h1 className="text-2xl font-bold text-white">Resume Builder Pro</h1>
+              <p className="text-cyan-100 text-sm">Create professional resumes with LaTeX support</p>
             </div>
-          </div>
-          <div className="flex items-center gap-6">
-            <a 
-              href="https://docs.example.com/resume-builder"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-blue-200 hover:text-blue-100 transition-colors"
+          </Link>
+          <nav className="flex items-center gap-6">
+            <Link 
+              to="/"
+              className="flex items-center gap-2 text-white hover:text-cyan-100 transition-colors"
             >
-              <BookOpen size={20} />
-              <span>Documentation</span>
-            </a>
-            <a 
-              href="https://github.com/yourusername/resume-builder"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-blue-200 hover:text-blue-100 transition-colors"
-            >
-              <Github size={20} />
-              <span>Source</span>
-            </a>
-          </div>
+              <Home size={20} />
+              <span>Home</span>
+            </Link>
+          </nav>
         </div>
       </div>
     </header>

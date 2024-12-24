@@ -25,6 +25,10 @@ const LatexEditor = ({
   const { toast } = useToast();
   const [latexCode, setLatexCode] = useState<string>(() => generateLatex());
 
+  useEffect(() => {
+    setLatexCode(generateLatex());
+  }, [personalInfo, experiences, education, skills, template]);
+
   function generateLatex() {
     const latex = `\\documentclass[10pt,a4paper]{article}
 
@@ -111,9 +115,13 @@ ${skills.join(', ')}` : ''}
   const handleRecompile = () => {
     try {
       onRecompile(latexCode);
+      document.getElementById('resume-preview')?.classList.add('animate-pulse');
+      setTimeout(() => {
+        document.getElementById('resume-preview')?.classList.remove('animate-pulse');
+      }, 1000);
       toast({
         title: "Success",
-        description: "Resume updated successfully from LaTeX code",
+        description: "Resume updated from LaTeX code",
       });
     } catch (error) {
       toast({
