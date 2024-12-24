@@ -79,7 +79,7 @@ const LatexEditor = ({
 ${personalInfo.email} • ${personalInfo.phone} • ${personalInfo.location}
 \\end{center}
 
-\\customsection{Experience}
+${experiences.length > 0 ? `\\customsection{Experience}
 ${experiences
   .map(
     (exp) => `\\textbf{${exp.company}} \\hfill ${exp.startDate} - ${exp.endDate}\\\\
@@ -88,9 +88,9 @@ ${exp.description}
 
 `
   )
-  .join('\n')}
+  .join('\n')}` : ''}
 
-\\customsection{Education}
+${education.length > 0 ? `\\customsection{Education}
 ${education
   .map(
     (edu) => `\\textbf{${edu.school}} \\hfill ${edu.year}\\\\
@@ -98,10 +98,10 @@ ${edu.degree}
 
 `
   )
-  .join('\n')}
+  .join('\n')}` : ''}
 
-\\customsection{Skills}
-${skills.join(', ')}
+${skills.length > 0 ? `\\customsection{Skills}
+${skills.join(', ')}` : ''}
 
 \\end{document}`;
 
