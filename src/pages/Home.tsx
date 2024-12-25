@@ -88,13 +88,16 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-b from-blue-950 to-blue-900">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
         <main className="container mx-auto px-4 py-12 space-y-24">
           {/* Hero Section */}
           <section className="text-center space-y-6">
-            <h1 className="text-5xl font-bold text-blue-100">Build a professional resume for free</h1>
-            <p className="text-xl text-blue-200">Create your resume easily with our free builder and professional templates.</p>
-            <Link to="/builder" className="glass-button text-lg px-8 py-4 inline-block">
+            <h1 className="text-4xl md:text-5xl font-bold text-cyan-900">Build a professional resume for free</h1>
+            <p className="text-xl text-cyan-700">Create your resume easily with our free builder and professional templates.</p>
+            <Link 
+              to="/builder" 
+              className="glass-button text-lg px-8 py-4 inline-block hover:bg-cyan-500/50"
+            >
               Create Your Resume Now
             </Link>
           </section>
@@ -102,23 +105,23 @@ const Home = () => {
           {/* Features Grid */}
           <section className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="glass-panel p-6 space-y-4">
+              <div key={index} className="glass-panel p-6 space-y-4 hover:bg-white/50 transition-all duration-300">
                 <div className="flex justify-center">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-center text-blue-100">{feature.title}</h3>
-                <p className="text-blue-200 text-center">{feature.description}</p>
+                <h3 className="text-xl font-semibold text-center text-cyan-900">{feature.title}</h3>
+                <p className="text-cyan-700 text-center">{feature.description}</p>
               </div>
             ))}
           </section>
 
           {/* Job Categories */}
           <section className="space-y-8">
-            <h2 className="text-3xl font-bold text-center text-blue-100">Resume Samples by Category</h2>
+            <h2 className="text-3xl font-bold text-center text-cyan-900">Resume Samples by Category</h2>
             <div className="grid md:grid-cols-4 gap-6">
               {jobCategories.map((category, index) => (
-                <div key={index} className="glass-panel p-4 text-center space-y-2">
+                <div key={index} className="glass-panel p-4 text-center space-y-2 hover:bg-white/50 transition-all duration-300">
                   <span className="text-4xl">{category.emoji}</span>
-                  <h3 className="text-lg font-medium text-blue-100">{category.title}</h3>
-                  <p className="text-blue-200">{category.count} templates</p>
+                  <h3 className="text-lg font-medium text-cyan-900">{category.title}</h3>
+                  <p className="text-cyan-700">{category.count} templates</p>
                 </div>
               ))}
             </div>
@@ -126,12 +129,12 @@ const Home = () => {
 
           {/* FAQs */}
           <section className="space-y-8">
-            <h2 className="text-3xl font-bold text-center text-blue-100">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-bold text-center text-cyan-900">Frequently Asked Questions</h2>
             <div className="max-w-3xl mx-auto space-y-6">
               {faqs.map((faq, index) => (
-                <div key={index} className="glass-panel p-6">
-                  <h3 className="text-xl font-semibold text-blue-100 mb-2">{faq.question}</h3>
-                  <p className="text-blue-200">{faq.answer}</p>
+                <div key={index} className="glass-panel p-6 hover:bg-white/50 transition-all duration-300">
+                  <h3 className="text-xl font-semibold text-cyan-900 mb-2">{faq.question}</h3>
+                  <p className="text-cyan-700">{faq.answer}</p>
                 </div>
               ))}
             </div>
