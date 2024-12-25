@@ -13,17 +13,10 @@ const AuthPage = () => {
       if (event === 'SIGNED_IN') {
         toast.success('Successfully signed in!');
         navigate('/');
-      }
-    });
-
-    // Listen for auth errors
-    const { data: { subscription } } = supabase.auth.onError((error) => {
-      if (error.message.includes('weak_password')) {
-        toast.error('Password must be at least 6 characters long');
-      } else if (error.message.includes('invalid_credentials')) {
-        toast.error('Invalid email or password');
-      } else {
-        toast.error(error.message);
+      } else if (event === 'USER_DELETED') {
+        toast.error('Account deleted');
+      } else if (event === 'PASSWORD_RECOVERY') {
+        toast.info('Password recovery email sent');
       }
     });
 
@@ -36,7 +29,6 @@ const AuthPage = () => {
 
     return () => {
       authListener.subscription.unsubscribe();
-      subscription.unsubscribe();
     };
   }, [navigate]);
 
