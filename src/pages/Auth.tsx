@@ -10,9 +10,13 @@ const Auth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') {
+    const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
         toast.success('Successfully signed in!');
+        navigate('/');
+      }
+      if (event === 'USER_UPDATED' && session) {
+        toast.success('Account created successfully!');
         navigate('/');
       }
     });
@@ -49,9 +53,19 @@ const Auth = () => {
                   button: 'glass-button w-full',
                   input: 'glass-input w-full',
                   label: 'text-cyan-800',
+                  message: 'text-red-500 text-sm',
                 },
               }}
               providers={['google']}
+              localization={{
+                variables: {
+                  sign_up: {
+                    password_validation_message: 'Password must be at least 6 characters long',
+                    email_validation_message: 'Please enter a valid email address',
+                  },
+                },
+              }}
+              redirectTo={window.location.origin}
             />
           </div>
         </div>
