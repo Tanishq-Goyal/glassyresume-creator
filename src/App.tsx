@@ -10,11 +10,11 @@ import Terms from "./pages/Terms";
 import Contact from "./pages/Contact";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import AuthPage from "./pages/Auth";
+import NotFound from "./pages/NotFound";
 import { useAuth } from "./components/AuthProvider";
 
 const queryClient = new QueryClient();
 
-// Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
 
@@ -44,6 +44,7 @@ const AppRoutes = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
