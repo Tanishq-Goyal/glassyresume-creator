@@ -1,6 +1,5 @@
 import React from 'react';
 import { PersonalInfo, Experience, Education } from './ResumeTypes';
-import { getTemplateStyles } from './resume/ResumeStyles';
 import { Phone, Mail, Github, Linkedin } from 'lucide-react';
 
 interface ResumePreviewProps {
@@ -20,79 +19,92 @@ const ResumePreview = ({
   template,
   optionalSections
 }: ResumePreviewProps) => {
-  const styles = getTemplateStyles(template);
-
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.name}>{personalInfo.fullName}</h1>
-        <p className={styles.subtitle}>Chemical Engineering (B.Tech)</p>
-        <div className={styles.contact}>
-          <a href={`tel:${personalInfo.phone}`} className={styles.contactItem}>
+    <div className="max-w-[21cm] mx-auto bg-white text-black p-8 shadow-xl">
+      {/* Header Section */}
+      <header className="text-center mb-8 border-b pb-6">
+        <h1 className="text-3xl font-bold mb-2">{personalInfo.fullName || 'Your Name'}</h1>
+        <p className="text-lg text-gray-600 mb-4">Chemical Engineering (B.Tech)</p>
+        <div className="flex justify-center items-center gap-6 text-sm text-gray-600">
+          <a href={`tel:${personalInfo.phone}`} className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
             <Phone size={16} />
             {personalInfo.phone}
           </a>
-          <a href={`mailto:${personalInfo.email}`} className={styles.contactItem}>
+          <a href={`mailto:${personalInfo.email}`} className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
             <Mail size={16} />
             {personalInfo.email}
           </a>
-          <a href="#" className={styles.contactItem}>
+          <a href="#" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
             <Github size={16} />
             GitHub
           </a>
-          <a href="#" className={styles.contactItem}>
+          <a href="#" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
             <Linkedin size={16} />
             LinkedIn
           </a>
         </div>
-      </div>
+      </header>
 
-      <div className={styles.content}>
-        <div className={styles.leftColumn}>
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Skills</h2>
-            <div className={styles.skillsList}>
+      {/* Main Content - Two Column Layout */}
+      <div className="grid grid-cols-[1fr_2.5fr] gap-6">
+        {/* Left Column */}
+        <div className="space-y-6">
+          <section>
+            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-1 border-b-2 border-gray-200">
+              Skills
+            </h2>
+            <div className="flex flex-wrap gap-2">
               {skills.map((skill, index) => (
-                <span key={index} className={styles.skillItem}>
+                <span 
+                  key={index}
+                  className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700 hover:bg-gray-200 transition-colors"
+                >
                   {skill}
                 </span>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Education</h2>
+          <section>
+            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-1 border-b-2 border-gray-200">
+              Education
+            </h2>
             {education.map((edu) => (
-              <div key={edu.id} className={styles.educationItem}>
-                <div className={styles.educationDate}>{edu.year}</div>
-                <h3 className={styles.experienceTitle}>{edu.degree}</h3>
-                <div className={styles.experienceCompany}>{edu.school}</div>
+              <div key={edu.id} className="mb-4">
+                <div className="text-sm text-gray-600">{edu.year}</div>
+                <div className="font-semibold">{edu.degree}</div>
+                <div className="text-gray-700">{edu.school}</div>
               </div>
             ))}
-          </div>
+          </section>
 
           {optionalSections.map((section, index) => (
-            <div key={index} className={styles.section}>
-              <h2 className={styles.sectionTitle}>{section.type}</h2>
-              <p>{section.content}</p>
-            </div>
+            <section key={index}>
+              <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-1 border-b-2 border-gray-200">
+                {section.type}
+              </h2>
+              <p className="text-gray-700">{section.content}</p>
+            </section>
           ))}
         </div>
 
-        <div className={styles.rightColumn}>
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Experience</h2>
+        {/* Right Column */}
+        <div className="space-y-6">
+          <section>
+            <h2 className="text-lg font-bold uppercase tracking-wider mb-4 pb-1 border-b-2 border-gray-200">
+              Experience
+            </h2>
             {experiences.map((exp) => (
-              <div key={exp.id} className={styles.experienceItem}>
-                <div className={styles.experienceDate}>
+              <div key={exp.id} className="mb-6 relative pl-24">
+                <div className="absolute left-0 top-0 text-sm text-gray-600 w-20">
                   {exp.startDate} - {exp.endDate}
                 </div>
-                <h3 className={styles.experienceTitle}>{exp.title}</h3>
-                <div className={styles.experienceCompany}>{exp.company}</div>
-                <p className={styles.experienceDescription}>{exp.description}</p>
+                <h3 className="font-semibold text-gray-800">{exp.title}</h3>
+                <div className="text-gray-700">{exp.company}</div>
+                <p className="mt-2 text-gray-600 whitespace-pre-line">{exp.description}</p>
               </div>
             ))}
-          </div>
+          </section>
         </div>
       </div>
     </div>
