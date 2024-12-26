@@ -60,6 +60,31 @@
          focus:outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all duration-300 text-cyan-900;
 }
 
+.resume-section-header {
+  @apply w-full text-center bg-[rgb(220,230,242)] py-1 font-bold text-sm mb-3;
+}
+
+.resume-text {
+  @apply text-sm leading-relaxed;
+}
+
+.resume-list {
+  @apply list-disc ml-4 space-y-1;
+}
+
+.resume-table {
+  @apply w-full text-sm;
+}
+
+.resume-table th,
+.resume-table td {
+  @apply py-1 px-2;
+}
+
 .resume-section {
-  @apply animate-fadeIn;
+  @apply mb-6;
+}
+
+.resume-section {
+  @apply mb-6;
 }
