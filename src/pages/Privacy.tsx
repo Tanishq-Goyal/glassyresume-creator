@@ -3,15 +3,15 @@ import Layout from '../components/Layout';
 
 const Privacy = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-950 to-blue-900">
-      <Layout>
+    <Layout>
+      <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
         <main className="container mx-auto px-4 py-12">
           <div className="glass-panel p-8 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-blue-100 mb-8">Privacy Policy</h1>
+            <h1 className="text-3xl font-bold text-cyan-900 mb-8">Privacy Policy</h1>
             
-            <div className="space-y-6 text-blue-200">
+            <div className="space-y-6 text-cyan-900">
               <section>
-                <h2 className="text-2xl font-semibold text-blue-100 mb-4">Information We Collect</h2>
+                <h2 className="text-2xl font-semibold text-cyan-800 mb-4">Information We Collect</h2>
                 <p>We collect information that you provide directly to us when using our resume builder service. This includes:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Personal information for your resume</li>
@@ -22,7 +22,7 @@ const Privacy = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-semibold text-blue-100 mb-4">How We Use Your Information</h2>
+                <h2 className="text-2xl font-semibold text-cyan-800 mb-4">How We Use Your Information</h2>
                 <p>We use the information we collect to:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Provide and maintain our services</li>
@@ -33,12 +33,12 @@ const Privacy = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-semibold text-blue-100 mb-4">Data Security</h2>
+                <h2 className="text-2xl font-semibold text-cyan-800 mb-4">Data Security</h2>
                 <p>We implement appropriate security measures to protect your personal information. However, no method of transmission over the Internet is 100% secure.</p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-semibold text-blue-100 mb-4">Your Rights</h2>
+                <h2 className="text-2xl font-semibold text-cyan-800 mb-4">Your Rights</h2>
                 <p>You have the right to:</p>
                 <ul className="list-disc pl-6 mt-2 space-y-2">
                   <li>Access your personal data</li>
@@ -50,8 +50,8 @@ const Privacy = () => {
             </div>
           </div>
         </main>
-      </Layout>
-    </div>
+      </div>
+    </Layout>
   );
 };
 

@@ -13,11 +13,11 @@ const Auth = () => {
     const { data: { subscription: authListener } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
         toast.success('Successfully signed in!');
-        navigate('/');
+        navigate('/builder');
       }
       if (event === 'USER_UPDATED' && session) {
         toast.success('Account created successfully!');
-        navigate('/');
+        navigate('/builder');
       }
     });
 
@@ -31,9 +31,10 @@ const Auth = () => {
       <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-md mx-auto glass-panel p-8">
-            <h1 className="text-3xl font-bold text-cyan-900 mb-8 text-center">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-cyan-900 mb-8 text-center">Create Account</h1>
             <SupabaseAuth 
               supabaseClient={supabase}
+              view="sign_up"
               appearance={{
                 theme: ThemeSupa,
                 variables: {
@@ -57,15 +58,7 @@ const Auth = () => {
                 },
               }}
               providers={['google']}
-              localization={{
-                variables: {
-                  sign_up: {
-                    password_validation_message: 'Password must be at least 6 characters long',
-                    email_validation_message: 'Please enter a valid email address',
-                  },
-                },
-              }}
-              redirectTo={window.location.origin}
+              redirectTo={window.location.origin + '/builder'}
             />
           </div>
         </div>
