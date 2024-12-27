@@ -16,6 +16,8 @@ import PhoneInput from '@/components/resume/PhoneInput';
 import ExperienceSection from '@/components/resume/ExperienceSection';
 import PublicationsSection from '@/components/resume/PublicationsSection';
 import AwardsSection from '@/components/resume/AwardsSection';
+import EducationForm from '@/components/resume/EducationForm';
+import SkillsForm from '@/components/resume/SkillsForm';
 
 const ResumeBuilder = () => {
   const { toast } = useToast();
@@ -32,7 +34,6 @@ const ResumeBuilder = () => {
   const [publications, setPublications] = useState<any[]>([]);
   const [awards, setAwards] = useState<any[]>([]);
   const [optionalSections, setOptionalSections] = useState<any[]>([]);
-  const [newSkill, setNewSkill] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [showPreview, setShowPreview] = useState(false);
 
@@ -66,6 +67,28 @@ const ResumeBuilder = () => {
     }
   };
 
+  // Education handlers
+  const addEducation = () => {
+    const newEdu = {
+      id: Date.now().toString(),
+      degree: '',
+      school: '',
+      year: '',
+    };
+    setEducation([...education, newEdu]);
+  };
+
+  const removeEducation = (id: string) => {
+    setEducation(education.filter(edu => edu.id !== id));
+  };
+
+  const updateEducation = (id: string, field: keyof Education, value: string) => {
+    setEducation(education.map(edu =>
+      edu.id === id ? { ...edu, [field]: value } : edu
+    ));
+  };
+
+  // Experience handlers
   const addExperience = () => {
     const newExp: Experience = {
       id: Date.now().toString(),
@@ -82,57 +105,40 @@ const ResumeBuilder = () => {
     setExperiences(experiences.filter(exp => exp.id !== id));
   };
 
-  const addEducation = () => {
-    const newEdu = {
-      id: Date.now().toString(),
-      degree: '',
-      school: '',
-      year: '',
-    };
-    setEducation([...education, newEdu]);
-  };
-
-  const removeEducation = (id: string) => {
-    setEducation(education.filter(edu => edu.id !== id));
-  };
-
-  const addPublication = () => {
-    const newPub = {
-      id: Date.now().toString(),
-      title: '',
-      conference: '',
-      location: '',
-      date: '',
-      description: '',
-    };
-    setPublications([...publications, newPub]);
-  };
-
-  const removePublication = (id: string) => {
-    setPublications(publications.filter(pub => pub.id !== id));
-  };
-
-  const updatePublication = (id: string, field: string, value: string) => {
-    setPublications(publications.map(pub =>
-      pub.id === id ? { ...pub, [field]: value } : pub
+  const updateExperience = (id: string, field: keyof Experience, value: string) => {
+    setExperiences(experiences.map(exp =>
+      exp.id === id ? { ...exp, [field]: value } : exp
     ));
   };
 
-  const addAward = () => {
-    const newAward = {
+  // Skills handlers
+  const addSkill = (skill: string) => {
+    if (!skills.includes(skill)) {
+      setSkills([...skills, skill]);
+    }
+  };
+
+  const removeSkill = (skill: string) => {
+    setSkills(skills.filter(s => s !== skill));
+  };
+
+  // Optional sections handlers
+  const handleAddOptionalSection = (sectionType: string) => {
+    const newSection = {
       id: Date.now().toString(),
-      description: '',
+      type: sectionType,
+      content: '',
     };
-    setAwards([...awards, newAward]);
+    setOptionalSections([...optionalSections, newSection]);
   };
 
-  const removeAward = (id: string) => {
-    setAwards(awards.filter(award => award.id !== id));
+  const removeOptionalSection = (id: string) => {
+    setOptionalSections(optionalSections.filter(section => section.id !== id));
   };
 
-  const updateAward = (id: string, description: string) => {
-    setAwards(awards.map(award =>
-      award.id === id ? { ...award, description } : award
+  const updateOptionalSection = (id: string, content: string) => {
+    setOptionalSections(optionalSections.map(section =>
+      section.id === id ? { ...section, content } : section
     ));
   };
 
@@ -223,53 +229,12 @@ const ResumeBuilder = () => {
                     </div>
                   )}
                   {section === 'education' && (
-                    <div className="glass-panel p-6 resume-section">
-                      <div className="flex items-center gap-2 mb-4">
-                        <h2 className="text-2xl font-semibold text-primary">Education</h2>
-                        <InfoTooltip content="Add your educational background" />
-                        <Button onClick={addEducation} className="glass-button ml-auto flex items-center gap-2">
-                          <Plus size={20} />
-                          Add Education
-                        </Button>
-                      </div>
-                      <div className="space-y-6">
-                        {education.map((edu) => (
-                          <div key={edu.id} className="space-y-4 p-4 bg-secondary/20 rounded-lg relative">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="absolute top-2 right-2 text-destructive hover:text-destructive/80"
-                              onClick={() => removeEducation(edu.id)}
-                            >
-                              <X size={20} />
-                            </Button>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <input
-                                type="text"
-                                placeholder="Degree"
-                                className="glass-input"
-                                value={edu.degree}
-                                onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
-                              />
-                              <input
-                                type="text"
-                                placeholder="School"
-                                className="glass-input"
-                                value={edu.school}
-                                onChange={(e) => updateEducation(edu.id, 'school', e.target.value)}
-                              />
-                              <input
-                                type="text"
-                                placeholder="Year"
-                                className="glass-input"
-                                value={edu.year}
-                                onChange={(e) => updateEducation(edu.id, 'year', e.target.value)}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <EducationForm
+                      education={education}
+                      onAddEducation={addEducation}
+                      onRemoveEducation={removeEducation}
+                      onUpdateEducation={updateEducation}
+                    />
                   )}
                   {section === 'experience' && (
                     <ExperienceSection
@@ -296,43 +261,11 @@ const ResumeBuilder = () => {
                     />
                   )}
                   {section === 'skills' && (
-                    <div className="glass-panel p-6 resume-section">
-                      <div className="flex items-center gap-2 mb-4">
-                        <h2 className="text-2xl font-semibold text-primary">Skills</h2>
-                        <InfoTooltip content="Add your technical and soft skills" />
-                      </div>
-                      <div className="space-y-4">
-                        <input
-                          type="text"
-                          placeholder="Add a skill (press Enter)"
-                          className="glass-input w-full"
-                          value={newSkill}
-                          onChange={(e) => setNewSkill(e.target.value)}
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter' && newSkill.trim()) {
-                              setSkills([...skills, newSkill.trim()]);
-                              setNewSkill('');
-                            }
-                          }}
-                        />
-                        <div className="flex flex-wrap gap-2">
-                          {skills.map((skill, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-2 px-3 py-1 bg-secondary/20 rounded-full"
-                            >
-                              <span className="text-primary">{skill}</span>
-                              <button
-                                onClick={() => removeSkill(skill)}
-                                className="text-destructive hover:text-destructive/80"
-                              >
-                                <X size={16} />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    <SkillsForm
+                      skills={skills}
+                      onAddSkill={addSkill}
+                      onRemoveSkill={removeSkill}
+                    />
                   )}
                   {section === 'optional' && (
                     <OptionalSections 
