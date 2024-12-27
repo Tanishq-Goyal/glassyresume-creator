@@ -16,6 +16,10 @@ const BasicResumePreview = ({
   skills,
   projects
 }: BasicResumePreviewProps) => {
+  const formatDescription = (text: string) => {
+    return text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  };
+
   return (
     <div className="w-full max-w-[21cm] mx-auto bg-white shadow-lg p-8 min-h-[29.7cm]">
       {/* Header */}
@@ -59,7 +63,11 @@ const BasicResumePreview = ({
                   </span>
                 </div>
                 <div className="text-gray-700">{exp.company}</div>
-                <p className="mt-1 text-sm whitespace-pre-line">{exp.description}</p>
+                <ul className="mt-2 list-disc pl-4 space-y-1">
+                  {formatDescription(exp.description).map((point, index) => (
+                    <li key={index} className="text-sm">{point}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -74,7 +82,11 @@ const BasicResumePreview = ({
             {projects.map((project) => (
               <div key={project.id}>
                 <strong>{project.title}</strong>
-                <p className="mt-1 text-sm">{project.description}</p>
+                <ul className="mt-2 list-disc pl-4 space-y-1">
+                  {formatDescription(project.description).map((point, index) => (
+                    <li key={index} className="text-sm">{point}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

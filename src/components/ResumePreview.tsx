@@ -20,6 +20,10 @@ const ResumePreview = ({
   optionalSections,
   sectionOrder
 }: ResumePreviewProps) => {
+  const formatDescription = (text: string) => {
+    return text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+  };
+
   const renderSection = (sectionId: string) => {
     switch(sectionId) {
       case 'education':
@@ -63,9 +67,9 @@ const ResumePreview = ({
                     <span>{exp.title} | {exp.company}</span>
                     <span>{exp.startDate} - {exp.endDate}</span>
                   </div>
-                  <ul className="resume-list">
-                    {exp.description.split('\n').map((point, index) => (
-                      <li key={index}>{point}</li>
+                  <ul className="list-disc pl-4 space-y-1">
+                    {formatDescription(exp.description).map((point, index) => (
+                      <li key={index} className="text-sm">{point}</li>
                     ))}
                   </ul>
                 </div>
@@ -93,13 +97,13 @@ const ResumePreview = ({
               <div className="resume-section-header">
                 {section.type.toUpperCase()}
               </div>
-              <div className="resume-text whitespace-pre-line">
-                {section.content.split('\n').map((point: string, idx: number) => (
-                  <div key={idx} className="leading-tight">
+              <ul className="list-disc pl-4 space-y-1">
+                {formatDescription(section.content).map((point: string, idx: number) => (
+                  <li key={idx} className="text-sm leading-tight">
                     {point}
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           );
         }
