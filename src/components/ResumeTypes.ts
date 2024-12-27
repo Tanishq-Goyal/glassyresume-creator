@@ -3,6 +3,10 @@ export interface PersonalInfo {
   email: string;
   phone: string;
   location: string;
+  github?: string;
+  linkedin?: string;
+  logoUrl?: string;
+  profilePictureUrl?: string;
 }
 
 export interface Experience {

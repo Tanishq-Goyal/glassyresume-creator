@@ -112,8 +112,15 @@ const ResumePreview = ({
       {/* Header Section with 3 columns */}
       <div className="flex justify-between items-center mb-4">
         <div className="w-[10%]">
-          {/* Left logo placeholder */}
-          <div className="w-[2cm] h-[2cm] bg-gray-200 rounded"></div>
+          {personalInfo.logoUrl ? (
+            <img 
+              src={personalInfo.logoUrl} 
+              alt="Institute Logo" 
+              className="w-[2cm] h-[2cm] object-contain"
+            />
+          ) : (
+            <div className="w-[2cm] h-[2cm] bg-gray-200 rounded"></div>
+          )}
         </div>
         <div className="w-[70%] text-center">
           <h1 className="text-[10pt] font-bold mb-1">
@@ -128,17 +135,28 @@ const ResumePreview = ({
           <div className="flex justify-center items-center gap-4 text-[8pt]">
             <span>📞 {personalInfo.phone || '+91 1234567890'}</span>
             <span>📧 {personalInfo.email || 'anonemail@example.com'}</span>
-            <a href="https://github.com/anonhandle" className="text-blue-600 hover:underline">
-              GitHub
-            </a>
-            <a href="https://linkedin.com/in/anon-linkedin" className="text-blue-600 hover:underline">
-              LinkedIn
-            </a>
+            {personalInfo.github && (
+              <a href={personalInfo.github} className="text-blue-600 hover:underline">
+                GitHub
+              </a>
+            )}
+            {personalInfo.linkedin && (
+              <a href={personalInfo.linkedin} className="text-blue-600 hover:underline">
+                LinkedIn
+              </a>
+            )}
           </div>
         </div>
         <div className="w-[15%]">
-          {/* Right profile picture placeholder */}
-          <div className="w-[2.5cm] h-[2.5cm] bg-gray-200 rounded-full"></div>
+          {personalInfo.profilePictureUrl ? (
+            <img 
+              src={personalInfo.profilePictureUrl} 
+              alt="Profile" 
+              className="w-[2.5cm] h-[2.5cm] object-cover rounded-full"
+            />
+          ) : (
+            <div className="w-[2.5cm] h-[2.5cm] bg-gray-200 rounded-full"></div>
+          )}
         </div>
       </div>
 

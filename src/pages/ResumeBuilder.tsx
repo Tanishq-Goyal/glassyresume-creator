@@ -16,6 +16,7 @@ import PublicationsManager from '@/components/resume/PublicationsManager';
 import AwardsManager from '@/components/resume/AwardsManager';
 import EducationForm from '@/components/resume/EducationForm';
 import SkillsForm from '@/components/resume/SkillsForm';
+import PersonalInfoForm from '@/components/resume/PersonalInfoForm';
 
 const ResumeBuilder = () => {
   const { toast } = useToast();
@@ -34,6 +35,32 @@ const ResumeBuilder = () => {
   const [optionalSections, setOptionalSections] = useState<any[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [showPreview, setShowPreview] = useState(false);
+
+  const handleUpdatePersonalInfo = (field: keyof PersonalInfo, value: string) => {
+    setPersonalInfo(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleUploadLogo = async (file: File) => {
+    // In a real application, you would upload the file to a server
+    // For now, we'll just create a local URL
+    const url = URL.createObjectURL(file);
+    setPersonalInfo(prev => ({ ...prev, logoUrl: url }));
+    toast({
+      title: "Logo uploaded",
+      description: "Your institute logo has been uploaded successfully.",
+    });
+  };
+
+  const handleUploadProfilePicture = async (file: File) => {
+    // In a real application, you would upload the file to a server
+    // For now, we'll just create a local URL
+    const url = URL.createObjectURL(file);
+    setPersonalInfo(prev => ({ ...prev, profilePictureUrl: url }));
+    toast({
+      title: "Profile picture uploaded",
+      description: "Your profile picture has been uploaded successfully.",
+    });
+  };
 
   const [sectionOrder, setSectionOrder] = useState([
     'personal',
@@ -182,6 +209,13 @@ const ResumeBuilder = () => {
               items={sectionOrder}
               strategy={verticalListSortingStrategy}
             >
+              <PersonalInfoForm
+                personalInfo={personalInfo}
+                onUpdatePersonalInfo={handleUpdatePersonalInfo}
+                onUploadLogo={handleUploadLogo}
+                onUploadProfilePicture={handleUploadProfilePicture}
+              />
+
               {sectionOrder.map((section) => (
                 <DraggableSection key={section} id={section}>
                   {section === 'publications' && (
