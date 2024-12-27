@@ -6,7 +6,6 @@ import DraggableSection from '@/components/DraggableSection';
 import { FileText, Download, Plus, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import TemplateSelector from "@/components/resume/TemplateSelector";
 import ResumePreview from "@/components/ResumePreview";
 import LatexEditor from "@/components/LatexEditor";
 import OptionalSections from "@/components/OptionalSections";
@@ -15,6 +14,8 @@ import { PersonalInfo, Experience, Education } from "@/components/ResumeTypes";
 import html2pdf from 'html2pdf.js';
 import PhoneInput from '@/components/resume/PhoneInput';
 import ExperienceSection from '@/components/resume/ExperienceSection';
+import PublicationsSection from '@/components/resume/PublicationsSection';
+import AwardsSection from '@/components/resume/AwardsSection';
 
 const ResumeBuilder = () => {
   const { toast } = useToast();
@@ -28,15 +29,23 @@ const ResumeBuilder = () => {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [education, setEducation] = useState<Education[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
-  const [projects, setProjects] = useState<any[]>([]);
-  const [achievements, setAchievements] = useState<string[]>([]);
-  const [positions, setPositions] = useState<any[]>([]);
+  const [publications, setPublications] = useState<any[]>([]);
+  const [awards, setAwards] = useState<any[]>([]);
   const [optionalSections, setOptionalSections] = useState<any[]>([]);
   const [newSkill, setNewSkill] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [showPreview, setShowPreview] = useState(false);
 
-  const [sectionOrder, setSectionOrder] = useState(['personal', 'education', 'experience', 'skills', 'optional']);
+  const [sectionOrder, setSectionOrder] = useState([
+    'personal',
+    'education',
+    'publications',
+    'experience',
+    'projects',
+    'awards',
+    'skills',
+    'optional'
+  ]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -87,45 +96,43 @@ const ResumeBuilder = () => {
     setEducation(education.filter(edu => edu.id !== id));
   };
 
-  const addSkill = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && newSkill.trim()) {
-      setSkills([...skills, newSkill.trim()]);
-      setNewSkill('');
-    }
-  };
-
-  const removeSkill = (skillToRemove: string) => {
-    setSkills(skills.filter(skill => skill !== skillToRemove));
-  };
-
-  const updateExperience = (id: string, field: keyof Experience, value: string) => {
-    setExperiences(experiences.map(exp => 
-      exp.id === id ? { ...exp, [field]: value } : exp
-    ));
-  };
-
-  const updateEducation = (id: string, field: keyof Education, value: string) => {
-    setEducation(education.map(edu => 
-      edu.id === id ? { ...edu, [field]: value } : edu
-    ));
-  };
-
-  const handleAddOptionalSection = (sectionType: string) => {
-    const newSection = {
+  const addPublication = () => {
+    const newPub = {
       id: Date.now().toString(),
-      type: sectionType,
-      content: '',
+      title: '',
+      conference: '',
+      location: '',
+      date: '',
+      description: '',
     };
-    setOptionalSections([...optionalSections, newSection]);
+    setPublications([...publications, newPub]);
   };
 
-  const removeOptionalSection = (id: string) => {
-    setOptionalSections(optionalSections.filter(section => section.id !== id));
+  const removePublication = (id: string) => {
+    setPublications(publications.filter(pub => pub.id !== id));
   };
 
-  const updateOptionalSection = (id: string, content: string) => {
-    setOptionalSections(optionalSections.map(section =>
-      section.id === id ? { ...section, content } : section
+  const updatePublication = (id: string, field: string, value: string) => {
+    setPublications(publications.map(pub =>
+      pub.id === id ? { ...pub, [field]: value } : pub
+    ));
+  };
+
+  const addAward = () => {
+    const newAward = {
+      id: Date.now().toString(),
+      description: '',
+    };
+    setAwards([...awards, newAward]);
+  };
+
+  const removeAward = (id: string) => {
+    setAwards(awards.filter(award => award.id !== id));
+  };
+
+  const updateAward = (id: string, description: string) => {
+    setAwards(awards.map(award =>
+      award.id === id ? { ...award, description } : award
     ));
   };
 
@@ -272,6 +279,22 @@ const ResumeBuilder = () => {
                       onUpdateExperience={updateExperience}
                     />
                   )}
+                  {section === 'publications' && (
+                    <PublicationsSection
+                      publications={publications}
+                      onAddPublication={addPublication}
+                      onRemovePublication={removePublication}
+                      onUpdatePublication={updatePublication}
+                    />
+                  )}
+                  {section === 'awards' && (
+                    <AwardsSection
+                      awards={awards}
+                      onAddAward={addAward}
+                      onRemoveAward={removeAward}
+                      onUpdateAward={updateAward}
+                    />
+                  )}
                   {section === 'skills' && (
                     <div className="glass-panel p-6 resume-section">
                       <div className="flex items-center gap-2 mb-4">
@@ -285,7 +308,12 @@ const ResumeBuilder = () => {
                           className="glass-input w-full"
                           value={newSkill}
                           onChange={(e) => setNewSkill(e.target.value)}
-                          onKeyPress={addSkill}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter' && newSkill.trim()) {
+                              setSkills([...skills, newSkill.trim()]);
+                              setNewSkill('');
+                            }
+                          }}
                         />
                         <div className="flex flex-wrap gap-2">
                           {skills.map((skill, index) => (
@@ -338,7 +366,17 @@ const ResumeBuilder = () => {
                   education={education}
                   skills={skills}
                   template={selectedTemplate}
-                  optionalSections={optionalSections}
+                  optionalSections={[...optionalSections, 
+                    ...publications.map(p => ({
+                      type: 'publications',
+                      content: `${p.title} | ${p.conference} | ${p.location} | ${p.date}\n${p.description}`
+                    })),
+                    ...awards.map(a => ({
+                      type: 'awards',
+                      content: a.description
+                    }))
+                  ]}
+                  sectionOrder={sectionOrder}
                 />
               </div>
               <div className="flex justify-end">

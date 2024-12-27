@@ -8,28 +8,20 @@
   :root {
     --background: 196 30% 95%;
     --foreground: 196 30% 15%;
-
     --card: 196 30% 92%;
     --card-foreground: 196 30% 15%;
-
     --popover: 196 30% 95%;
     --popover-foreground: 196 30% 15%;
-
     --primary: 196 30% 45%;
     --primary-foreground: 196 30% 98%;
-
     --secondary: 186 30% 90%;
     --secondary-foreground: 196 30% 15%;
-
     --muted: 196 30% 90%;
     --muted-foreground: 196 30% 45%;
-
     --accent: 186 30% 85%;
     --accent-foreground: 196 30% 15%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 196 30% 85%;
     --input: 196 30% 85%;
     --ring: 196 30% 50%;
@@ -61,28 +53,24 @@
 }
 
 .resume-section-header {
-  @apply w-full text-center bg-[rgb(220,230,242)] py-1 font-bold text-sm mb-3;
+  @apply w-full text-center bg-[rgb(220,230,242)] py-1 font-bold text-[10pt] mb-2;
 }
 
 .resume-text {
-  @apply text-sm leading-relaxed;
+  @apply text-[10pt] leading-relaxed;
 }
 
 .resume-list {
-  @apply list-disc ml-4 space-y-1;
+  @apply list-disc ml-4 space-y-1 text-[10pt];
 }
 
 .resume-table {
-  @apply w-full text-sm;
+  @apply w-full text-[10pt];
 }
 
 .resume-table th,
 .resume-table td {
   @apply py-1 px-2;
-}
-
-.resume-section {
-  @apply mb-6;
 }
 
 .resume-section {
