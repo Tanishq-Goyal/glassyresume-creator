@@ -3,19 +3,17 @@ import Layout from '@/components/Layout';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import DraggableSection from '@/components/DraggableSection';
-import { FileText, Download, Plus, X } from 'lucide-react';
+import { FileText, Download } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import ResumePreview from "@/components/ResumePreview";
 import LatexEditor from "@/components/LatexEditor";
 import OptionalSections from "@/components/OptionalSections";
-import InfoTooltip from "@/components/InfoTooltip";
 import { PersonalInfo, Experience, Education } from "@/components/ResumeTypes";
 import html2pdf from 'html2pdf.js';
-import PhoneInput from '@/components/resume/PhoneInput';
 import ExperienceSection from '@/components/resume/ExperienceSection';
-import PublicationsSection from '@/components/resume/PublicationsSection';
-import AwardsSection from '@/components/resume/AwardsSection';
+import PublicationsManager from '@/components/resume/PublicationsManager';
+import AwardsManager from '@/components/resume/AwardsManager';
 import EducationForm from '@/components/resume/EducationForm';
 import SkillsForm from '@/components/resume/SkillsForm';
 
@@ -169,13 +167,6 @@ const ResumeBuilder = () => {
     }
   };
 
-  const handleLatexRecompile = (latexCode: string) => {
-    toast({
-      title: "LaTeX Recompiled",
-      description: "Resume updated from LaTeX code",
-    });
-  };
-
   return (
     <Layout>
       <div className="min-h-screen p-8 bg-background">
@@ -193,40 +184,17 @@ const ResumeBuilder = () => {
             >
               {sectionOrder.map((section) => (
                 <DraggableSection key={section} id={section}>
-                  {section === 'personal' && (
-                    <div className="glass-panel p-6 resume-section">
-                      <div className="flex items-center gap-2 mb-4">
-                        <h2 className="text-2xl font-semibold text-primary">Personal Information</h2>
-                        <InfoTooltip content="Add your contact details and basic information" />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input
-                          type="text"
-                          placeholder="Full Name"
-                          className="glass-input text-primary"
-                          value={personalInfo.fullName}
-                          onChange={(e) => setPersonalInfo({ ...personalInfo, fullName: e.target.value })}
-                        />
-                        <input
-                          type="email"
-                          placeholder="Email"
-                          className="glass-input text-primary"
-                          value={personalInfo.email}
-                          onChange={(e) => setPersonalInfo({ ...personalInfo, email: e.target.value })}
-                        />
-                        <PhoneInput
-                          value={personalInfo.phone}
-                          onChange={(value) => setPersonalInfo({ ...personalInfo, phone: value })}
-                        />
-                        <input
-                          type="text"
-                          placeholder="Location"
-                          className="glass-input text-primary"
-                          value={personalInfo.location}
-                          onChange={(e) => setPersonalInfo({ ...personalInfo, location: e.target.value })}
-                        />
-                      </div>
-                    </div>
+                  {section === 'publications' && (
+                    <PublicationsManager
+                      publications={publications}
+                      setPublications={setPublications}
+                    />
+                  )}
+                  {section === 'awards' && (
+                    <AwardsManager
+                      awards={awards}
+                      setAwards={setAwards}
+                    />
                   )}
                   {section === 'education' && (
                     <EducationForm
@@ -242,22 +210,6 @@ const ResumeBuilder = () => {
                       onAddExperience={addExperience}
                       onRemoveExperience={removeExperience}
                       onUpdateExperience={updateExperience}
-                    />
-                  )}
-                  {section === 'publications' && (
-                    <PublicationsSection
-                      publications={publications}
-                      onAddPublication={addPublication}
-                      onRemovePublication={removePublication}
-                      onUpdatePublication={updatePublication}
-                    />
-                  )}
-                  {section === 'awards' && (
-                    <AwardsSection
-                      awards={awards}
-                      onAddAward={addAward}
-                      onRemoveAward={removeAward}
-                      onUpdateAward={updateAward}
                     />
                   )}
                   {section === 'skills' && (
@@ -321,14 +273,6 @@ const ResumeBuilder = () => {
                   Download PDF
                 </Button>
               </div>
-              <LatexEditor
-                personalInfo={personalInfo}
-                experiences={experiences}
-                education={education}
-                skills={skills}
-                template={selectedTemplate}
-                onRecompile={handleLatexRecompile}
-              />
             </div>
           )}
         </div>
