@@ -13,6 +13,7 @@ const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Contact = lazy(() => import("./pages/Contact"));
 const ResumeBuilder = lazy(() => import("./pages/ResumeBuilder"));
+const BasicResumeBuilder = lazy(() => import("./pages/BasicResumeBuilder"));
 const AuthPage = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -58,6 +59,11 @@ const AppRoutes = () => {
         <Route path="/builder" element={
           <ProtectedRoute>
             <ResumeBuilder />
+          </ProtectedRoute>
+        } />
+        <Route path="/basic-builder" element={
+          <ProtectedRoute>
+            <BasicResumeBuilder />
           </ProtectedRoute>
         } />
         <Route path="/privacy" element={<Privacy />} />
