@@ -22,7 +22,121 @@ const LatexEditor = ({
   template,
   onRecompile 
 }: LatexEditorProps) => {
-  const [latexCode, setLatexCode] = useState<string>('');
+  const [latexCode, setLatexCode] = useState<string>(`\\documentclass[10pt,a4paper]{article}
+
+% Required packages
+\\usepackage[top=0.15in, bottom=0.15in, left=0.15in, right=0.15in]{geometry}
+\\usepackage{enumitem}
+\\usepackage{titlesec}
+\\usepackage{hyperref}
+\\usepackage{fontawesome5}
+\\usepackage{xcolor}
+\\usepackage{array}
+\\usepackage{tabularx}
+\\usepackage{graphicx}
+\\usepackage{wrapfig}
+\\usepackage{helvet}
+\\renewcommand{\\familydefault}{\\sfdefault}
+
+% Define colors
+\\definecolor{sectionblue}{RGB}{220,230,242}
+\\definecolor{linkblue}{RGB}{0,0,255}
+
+% Configure hyperlinks
+\\hypersetup{
+    colorlinks=true,
+    linkcolor=linkblue,
+    urlcolor=linkblue
+}
+
+% Custom section style
+\\newcommand{\\customsection}[1]{%
+    \\vspace{0.3em}
+    \\noindent\\colorbox{sectionblue}{\\parbox{\\dimexpr\\textwidth-2\\fboxsep}{
+        \\vspace{0.1em}\\centering\\textbf{\\fontsize{10}{12}\\selectfont #1}\\vspace{0.1em}
+    }}
+    \\vspace{0.3em}
+}
+
+% Remove section numbering
+\\renewcommand{\\thesection}{}
+
+% Custom bullet style
+\\renewcommand{\\labelitemi}{$\\bullet$}
+
+% Adjust itemize spacing and remove indentation
+\\setlist[itemize]{topsep=0pt,itemsep=0.1em,partopsep=0pt,parsep=0pt,leftmargin=*}
+\\setlength{\\parindent}{0pt}
+
+\\begin{document}
+
+\\begin{minipage}{0.1\\textwidth}
+    % Logo placeholder
+\\end{minipage}
+\\hfill
+\\begin{minipage}{0.7\\textwidth}
+    \\begin{center}
+    \\textbf{\\fontsize{10}{14}\\selectfont ANON ANON ANON | 21AB00000}\\\\
+    \\vspace{0.2em}
+    \\textbf{\\fontsize{8}{12}\\selectfont ANON ANON (M.Tech Dual 5Y)}\\\\
+    \\textbf{\\fontsize{8}{12}\\selectfont MICRO SPL. in ANON INTELLIGENCE AND APPLICATIONS}\\\\
+    \\vspace{0.4em}
+    {\\small \\faPhone\\ +91 1234567890 \\hspace{0.5em} \\faEnvelope\\ anonemail@example.com \\hspace{0.5em} \\faGithub\\ \\href{https://github.com/anonhandle}{anonhandle} \\hspace{0.5em} \\faLinkedin\\ \\href{https://linkedin.com/in/anon-linkedin}{anon-linkedin}}
+    \\end{center}
+\\end{minipage}
+\\hfill
+\\begin{minipage}{0.15\\textwidth}
+    % Profile picture placeholder
+\\end{minipage}
+
+% Education Section
+\\customsection{EDUCATION}
+{\\small
+\\begin{tabular}{p{0.05\\textwidth}p{0.375\\textwidth}p{0.4\\textwidth}p{0.15\\textwidth}}
+\\textbf{Year} & \\textbf{Degree/Exam} & \\textbf{Institute} & \\textbf{CGPA/Marks}\\\\
+2026 & ANON Dual Degree 5Y & ANON University & 8.46 / 10\\\\
+2021 & ANON (School) Certificate & ANON Higher Secondary School & 98.6\\%\\\\
+2019 & ANON Certificate of Secondary Education & ANON School & 98.4\\%
+\\end{tabular}
+}
+
+% Publications Section
+\\customsection{PUBLICATIONS}
+{\\small
+\\noindent\\textbf{ANON: A Generalised Framework for Tooling | ANON 2024 | ANON, Greece \\hfill May 2024}
+\\begin{itemize}
+\\item Proposed a pipeline for ANON usage, achieving a 20\\% improvement over current SoTA benchmarks like ANON and ANON.
+\\item Employed ANON techniques to fine-tune models, reducing computational costs by 30\\%, optimizing resource usage.
+\\item Developed synthetic datasets for diverse scenarios, increasing model adaptability by 15\\% after fine-tuning.
+\\end{itemize}
+}
+
+% Internships Section
+\\customsection{INTERNSHIPS}
+{\\small
+\\noindent\\textbf{Data Science Intern | ANON | Bengaluru \\hfill Jul 2024 - Present}
+\\begin{itemize}
+\\item Developed an ANON model to estimate demand volume, enhancing forecasting capabilities.
+\\item Achieved a 15\\% reduction in ANON Error through advanced optimization techniques.
+\\item Improved operational efficiency, resulting in a 5\\% reduction in ANON consumption.
+\\end{itemize}
+
+\\noindent\\textbf{Data Engineer | ANON | San Francisco \\hfill Jul 2024 - Present}
+\\begin{itemize}
+\\item Created a dataset of size 100,000 to fine-tune models for solving complex problems.
+\\item Implemented preprocessing techniques, increasing model accuracy by filtering irrelevant data.
+\\item Automated pipelines, reducing total preparation time and enabling faster iterations.
+\\end{itemize}
+}
+
+% Skills Section
+\\customsection{SKILLS AND EXPERTISE}
+{\\small
+\\noindent\\textbf{Tools:} ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON\\\\[0.3em]
+\\textbf{Languages \\& Libraries:} ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON, ANON
+}
+
+\\end{document}`);
 
   useEffect(() => {
     const generatedLatex = generateLatex();

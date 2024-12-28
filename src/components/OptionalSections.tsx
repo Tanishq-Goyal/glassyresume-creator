@@ -2,13 +2,19 @@ import React from 'react';
 import { Plus, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
+import { Input } from './ui/input';
 import InfoTooltip from './InfoTooltip';
 
 interface OptionalSectionsProps {
   onAddSection: (sectionType: string) => void;
-  sections: any[];
+  sections: {
+    id: string;
+    type: string;
+    title?: string;
+    content: string;
+  }[];
   onRemoveSection: (id: string) => void;
-  onUpdateSection: (id: string, content: string) => void;
+  onUpdateSection: (id: string, field: 'content' | 'title', value: string) => void;
 }
 
 const OptionalSections = ({ 
@@ -89,13 +95,21 @@ const OptionalSections = ({
             >
               <X size={20} />
             </Button>
+            {section.type === 'custom' && (
+              <Input
+                value={section.title || 'Custom Section'}
+                onChange={(e) => onUpdateSection(section.id, 'title', e.target.value)}
+                className="glass-input mb-2 font-semibold"
+                placeholder="Section Title"
+              />
+            )}
             <h3 className="text-lg font-semibold text-primary mb-2 capitalize">
-              {section.type}
+              {section.type === 'custom' ? (section.title || 'Custom Section') : section.type}
             </h3>
             <Textarea
               value={section.content}
-              onChange={(e) => onUpdateSection(section.id, e.target.value)}
-              placeholder={`Enter your ${section.type.toLowerCase()} details...`}
+              onChange={(e) => onUpdateSection(section.id, 'content', e.target.value)}
+              placeholder={`Enter your ${section.type.toLowerCase()} details (use new lines for bullet points)...`}
               className="glass-input mt-2"
             />
           </div>

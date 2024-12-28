@@ -32,11 +32,21 @@ const BasicResumeBuilder = () => {
     if (!element) return;
 
     const opt = {
-      margin: 1,
+      margin: 0,
       filename: `${personalInfo.fullName.toLowerCase().replace(/\s+/g, '_')}_resume.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      html2canvas: { 
+        scale: 2,
+        useCORS: true,
+        logging: true
+      },
+      jsPDF: { 
+        unit: 'in', 
+        format: 'letter', 
+        orientation: 'portrait',
+        putTotalPages: true
+      },
+      enableLinks: true
     };
 
     try {
