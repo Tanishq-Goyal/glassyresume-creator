@@ -15,16 +15,58 @@ import html2pdf from 'html2pdf.js';
 const BasicResumeBuilder = () => {
   const { toast } = useToast();
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
-    fullName: '',
-    email: '',
-    phone: '',
-    location: '',
+    fullName: 'ANON ANON ANON',
+    email: 'anonemail@example.com',
+    phone: '+91 1234567890',
+    location: 'Bengaluru, India',
   });
 
-  const [education, setEducation] = useState<Education[]>([]);
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [skills, setSkills] = useState<string[]>([]);
-  const [projects, setProjects] = useState<{ id: string; title: string; description: string; }[]>([]);
+  const [education, setEducation] = useState<Education[]>([
+    {
+      id: '1',
+      degree: 'ANON Dual Degree 5Y',
+      school: 'ANON University',
+      year: '2026'
+    },
+    {
+      id: '2',
+      degree: 'ANON (School) Certificate',
+      school: 'ANON Higher Secondary School',
+      year: '2021'
+    }
+  ]);
+
+  const [experiences, setExperiences] = useState<Experience[]>([
+    {
+      id: '1',
+      title: 'Data Science Intern',
+      company: 'ANON',
+      startDate: 'Jul 2024',
+      endDate: 'Present',
+      description: 'Developed an ANON model to estimate demand volume, enhancing forecasting capabilities.\nAchieved a 15% reduction in ANON Error through advanced optimization techniques.\nImproved operational efficiency, resulting in a 5% reduction in ANON consumption.'
+    },
+    {
+      id: '2',
+      title: 'Research Intern',
+      company: 'ANON',
+      startDate: 'Jan 2024',
+      endDate: 'Mar 2024',
+      description: 'Published the paper "ANON: A Generalised Framework for Tooling," detailing a pipeline for ANON application.\nDeveloped an agent for ANON, successfully merging an approved PR into the repository.\nConducted experiments achieving a 25% latency reduction using quantization methods.'
+    }
+  ]);
+
+  const [skills, setSkills] = useState<string[]>([
+    'ANON', 'ANON', 'ANON', 'ANON', 'ANON', 'Python', 'Machine Learning', 'Data Science'
+  ]);
+
+  const [projects, setProjects] = useState<{ id: string; title: string; description: string; }[]>([
+    {
+      id: '1',
+      title: 'ANON: An AI-powered Chat Bot',
+      description: 'Developed ANON using quantized ANON models. Scraped data to create databases.\nDesigned and deployed an app to showcase ANON, ensuring seamless interaction.'
+    }
+  ]);
+
   const [showPreview, setShowPreview] = useState(false);
 
   const handleDownloadPDF = async () => {
@@ -32,21 +74,25 @@ const BasicResumeBuilder = () => {
     if (!element) return;
 
     const opt = {
-      margin: 0,
+      margin: [0, 0, 0, 0],
       filename: `${personalInfo.fullName.toLowerCase().replace(/\s+/g, '_')}_resume.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
         scale: 2,
         useCORS: true,
-        logging: true
+        logging: true,
+        allowTaint: true,
+        foreignObjectRendering: true
       },
       jsPDF: { 
-        unit: 'in', 
-        format: 'letter', 
+        unit: 'mm', 
+        format: 'a4', 
         orientation: 'portrait',
+        compress: false,
         putTotalPages: true
       },
-      enableLinks: true
+      enableLinks: true,
+      pagebreak: { mode: 'avoid-all' }
     };
 
     try {

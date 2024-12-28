@@ -21,7 +21,7 @@ const BasicResumePreview = ({
   };
 
   return (
-    <div className="w-full max-w-[21cm] mx-auto bg-white shadow-lg p-8 min-h-[29.7cm]">
+    <div className="w-[210mm] mx-auto bg-white shadow-lg p-8" style={{ minHeight: '297mm' }}>
       {/* Header */}
       <div className="text-center mb-6 pb-4 border-b">
         <h1 className="text-2xl font-bold mb-2">{personalInfo.fullName}</h1>
@@ -57,12 +57,11 @@ const BasicResumePreview = ({
             {experiences.map((exp) => (
               <div key={exp.id}>
                 <div className="flex justify-between">
-                  <strong>{exp.title}</strong>
+                  <strong>{exp.title} | {exp.company}</strong>
                   <span className="text-sm">
                     {exp.startDate} - {exp.endDate}
                   </span>
                 </div>
-                <div className="text-gray-700">{exp.company}</div>
                 <ul className="mt-2 list-disc pl-4 space-y-1">
                   {formatDescription(exp.description).map((point, index) => (
                     <li key={index} className="text-sm">{point}</li>
