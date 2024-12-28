@@ -19,6 +19,10 @@ const Auth = () => {
         toast.success('Account created successfully!');
         navigate('/builder');
       }
+      if (event === 'SIGNED_OUT') {
+        toast.success('Signed out successfully');
+        navigate('/');
+      }
     });
 
     return () => {
@@ -31,10 +35,9 @@ const Auth = () => {
       <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-blue-100">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-md mx-auto glass-panel p-8">
-            <h1 className="text-3xl font-bold text-cyan-900 mb-8 text-center">Create Account</h1>
+            <h1 className="text-3xl font-bold text-cyan-900 mb-8 text-center">Welcome Back</h1>
             <SupabaseAuth 
               supabaseClient={supabase}
-              view="sign_up"
               appearance={{
                 theme: ThemeSupa,
                 variables: {
@@ -58,7 +61,11 @@ const Auth = () => {
                 },
               }}
               providers={['google']}
-              redirectTo={window.location.origin + '/builder'}
+              redirectTo={`${window.location.origin}/builder`}
+              onError={(error) => {
+                console.error('Auth error:', error);
+                toast.error(error.message || 'An error occurred during authentication');
+              }}
             />
           </div>
         </div>
