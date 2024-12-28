@@ -74,26 +74,34 @@ const BasicResumeBuilder = () => {
     if (!element) return;
 
     // Force any pending state updates to complete
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const opt = {
       margin: 0,
       filename: `${personalInfo.fullName.toLowerCase().replace(/\s+/g, '_')}_resume.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: 'jpeg', quality: 1 },
       html2canvas: { 
-        scale: 2,
+        scale: 4,
         useCORS: true,
         logging: true,
         allowTaint: true,
         foreignObjectRendering: true,
         windowWidth: element.scrollWidth,
         windowHeight: element.scrollHeight,
+        onclone: function(clonedDoc) {
+          const clonedElement = clonedDoc.getElementById('basic-resume-preview');
+          if (clonedElement) {
+            clonedElement.style.height = 'auto';
+            clonedElement.style.minHeight = '297mm';
+          }
+        }
       },
       jsPDF: { 
         unit: 'mm', 
         format: 'a4', 
         orientation: 'portrait',
-        compress: true
+        compress: true,
+        hotfixes: ['px_scaling']
       }
     };
 
@@ -105,7 +113,7 @@ const BasicResumeBuilder = () => {
       );
 
       // Generate PDF
-      const pdf = await html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt).from(element).save();
       
       toast({
         title: "Success",
@@ -164,7 +172,7 @@ const BasicResumeBuilder = () => {
 
           {showPreview && (
             <div className="space-y-8">
-              <div id="basic-resume-preview" className="bg-white">
+              <div id="basic-resume-preview" className="bg-white shadow-none print:shadow-none">
                 <BasicResumePreview
                   personalInfo={personalInfo}
                   education={education}

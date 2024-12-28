@@ -21,7 +21,7 @@ const BasicResumePreview = ({
   };
 
   return (
-    <div className="w-[210mm] mx-auto bg-white p-[20mm]" style={{ minHeight: '297mm' }}>
+    <div className="w-[210mm] mx-auto bg-white p-[15mm] print:shadow-none" style={{ minHeight: '297mm' }}>
       {/* Header */}
       <div className="text-center mb-6 pb-4 border-b">
         <h1 className="text-2xl font-bold mb-2">{personalInfo.fullName}</h1>
@@ -37,7 +37,7 @@ const BasicResumePreview = ({
           <h2 className="text-lg font-semibold mb-3 pb-1 border-b">Education</h2>
           <div className="space-y-3">
             {education.map((edu) => (
-              <div key={edu.id}>
+              <div key={edu.id} className="break-inside-avoid">
                 <div className="flex justify-between">
                   <strong>{edu.degree}</strong>
                   <span>{edu.year}</span>
@@ -55,7 +55,7 @@ const BasicResumePreview = ({
           <h2 className="text-lg font-semibold mb-3 pb-1 border-b">Experience</h2>
           <div className="space-y-4">
             {experiences.map((exp) => (
-              <div key={exp.id}>
+              <div key={exp.id} className="break-inside-avoid">
                 <div className="flex justify-between">
                   <strong>{exp.title} | {exp.company}</strong>
                   <span className="text-sm">
@@ -64,7 +64,7 @@ const BasicResumePreview = ({
                 </div>
                 <ul className="mt-2 list-disc pl-4 space-y-1">
                   {formatDescription(exp.description).map((point, index) => (
-                    <li key={index} className="text-sm">{point}</li>
+                    <li key={`${exp.id}-${index}`} className="text-sm">{point}</li>
                   ))}
                 </ul>
               </div>
@@ -79,11 +79,11 @@ const BasicResumePreview = ({
           <h2 className="text-lg font-semibold mb-3 pb-1 border-b">Projects</h2>
           <div className="space-y-3">
             {projects.map((project) => (
-              <div key={project.id}>
+              <div key={project.id} className="break-inside-avoid">
                 <strong>{project.title}</strong>
                 <ul className="mt-2 list-disc pl-4 space-y-1">
                   {formatDescription(project.description).map((point, index) => (
-                    <li key={index} className="text-sm">{point}</li>
+                    <li key={`${project.id}-${index}`} className="text-sm">{point}</li>
                   ))}
                 </ul>
               </div>
@@ -94,12 +94,12 @@ const BasicResumePreview = ({
 
       {/* Skills */}
       {skills.length > 0 && (
-        <div>
+        <div className="break-inside-avoid">
           <h2 className="text-lg font-semibold mb-3 pb-1 border-b">Skills</h2>
           <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
+            {skills.map((skill, index) => (
               <span
-                key={skill}
+                key={`${skill}-${index}`}
                 className="bg-gray-100 px-2 py-1 rounded text-sm"
               >
                 {skill}
