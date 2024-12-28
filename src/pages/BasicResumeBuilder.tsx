@@ -73,8 +73,11 @@ const BasicResumeBuilder = () => {
     const element = document.getElementById('basic-resume-preview');
     if (!element) return;
 
+    // Force any pending state updates to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     const opt = {
-      margin: [0, 0, 0, 0],
+      margin: 0,
       filename: `${personalInfo.fullName.toLowerCase().replace(/\s+/g, '_')}_resume.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
@@ -82,26 +85,34 @@ const BasicResumeBuilder = () => {
         useCORS: true,
         logging: true,
         allowTaint: true,
-        foreignObjectRendering: true
+        foreignObjectRendering: true,
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
       },
       jsPDF: { 
         unit: 'mm', 
         format: 'a4', 
         orientation: 'portrait',
-        compress: false,
-        putTotalPages: true
-      },
-      enableLinks: true,
-      pagebreak: { mode: 'avoid-all' }
+        compress: true
+      }
     };
 
     try {
-      await html2pdf().set(opt).from(element).save();
+      // Wait for images to load
+      await Promise.all(
+        Array.from(element.getElementsByTagName('img'))
+          .map(img => img.complete ? Promise.resolve() : new Promise(resolve => img.onload = resolve))
+      );
+
+      // Generate PDF
+      const pdf = await html2pdf().set(opt).from(element).save();
+      
       toast({
         title: "Success",
         description: "Resume downloaded successfully",
       });
     } catch (error) {
+      console.error('PDF generation error:', error);
       toast({
         title: "Error",
         description: "Failed to download resume",
@@ -153,7 +164,7 @@ const BasicResumeBuilder = () => {
 
           {showPreview && (
             <div className="space-y-8">
-              <div id="basic-resume-preview">
+              <div id="basic-resume-preview" className="bg-white">
                 <BasicResumePreview
                   personalInfo={personalInfo}
                   education={education}
