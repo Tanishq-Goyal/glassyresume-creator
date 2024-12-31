@@ -79,7 +79,7 @@ const BasicResumeBuilder = () => {
     const opt = {
       margin: 0,
       filename: `${personalInfo.fullName.toLowerCase().replace(/\s+/g, '_')}_resume.pdf`,
-      image: { type: 'jpeg', quality: 1 },
+      image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { 
         scale: 4,
         useCORS: true,
@@ -92,7 +92,9 @@ const BasicResumeBuilder = () => {
           const clonedElement = clonedDoc.getElementById('basic-resume-preview');
           if (clonedElement) {
             clonedElement.style.height = 'auto';
-            clonedElement.style.minHeight = '297mm';
+            clonedElement.style.width = '100%';
+            clonedElement.style.margin = '0';
+            clonedElement.style.padding = '0';
           }
         }
       },
@@ -101,7 +103,9 @@ const BasicResumeBuilder = () => {
         format: 'a4', 
         orientation: 'portrait',
         compress: true,
-        hotfixes: ['px_scaling']
+        hotfixes: ['px_scaling'],
+        putTotalPages: true,
+        enableLinks: true
       }
     };
 
@@ -112,8 +116,9 @@ const BasicResumeBuilder = () => {
           .map(img => img.complete ? Promise.resolve() : new Promise(resolve => img.onload = resolve))
       );
 
-      // Generate PDF
-      await html2pdf().set(opt).from(element).save();
+      // Generate PDF with text layer
+      const pdf = html2pdf().set(opt);
+      await pdf.from(element).save();
       
       toast({
         title: "Success",
