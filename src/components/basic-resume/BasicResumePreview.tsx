@@ -21,7 +21,7 @@ const BasicResumePreview = ({
   };
 
   return (
-    <div className="w-[210mm] mx-auto bg-white p-[15mm] print:p-0 print:shadow-none" style={{ minHeight: '297mm' }}>
+    <div id="basic-resume-preview" className="w-[210mm] mx-auto bg-white print:p-0 print:shadow-none">
       {/* Header */}
       <div className="text-center mb-6 pb-4 border-b">
         <h1 className="text-2xl font-bold mb-2">{personalInfo.fullName}</h1>
